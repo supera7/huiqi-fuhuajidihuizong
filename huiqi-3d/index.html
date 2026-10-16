@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>惠企共产小院 3D</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#0c1618">
+<meta name="description" content="创之星惠企共产小院，海口亚龙别墅内。3D 浏览小院 19 栋楼，跟随镜头走进 5 栋功能楼的实景空间。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+XiaoWei&display=swap">
+<style>
+/* Layout: split hero (copy | live 3D model of the 亚龙别墅 compound) → 6 stops along the visit route → promo videos → free services → site plan + address.
+   Palette taken from the courtyard's own signage: teal shopfront boards, red "function building" marking from the site map, gold of the 亚龙别墅 plaque. Single dark look by choice. */
+:root{
+  --ink:#0c1618; --panel:#132225; --panel-2:#1a2e32; --line:rgba(200,232,234,.12); --line-2:rgba(200,232,234,.24);
+  --fg:#eef5f4; --muted:#9db3b4; --dim:#6c8487;
+  --teal:#2fb5c4; --teal-ink:#03181b; --red:#e2392f; --red-soft:rgba(226,57,47,.18); --gold:#e9bf5a; --paper:#f3f2ee; --paper-ink:#2c3a3c;
+  --display:"ZCOOL XiaoWei","Noto Serif SC","Songti SC","STSong",serif;
+  --body:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:14px; --wrap:1240px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--fg);font:15px/1.7 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.is-immersive{overflow:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:6px}
+h1,h2,h3{text-wrap:balance;margin:0;font-weight:400}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:700px){.wrap{padding-left:max(40px,env(safe-area-inset-left,0px));padding-right:max(40px,env(safe-area-inset-right,0px))}}
+.kicker{display:inline-flex;align-items:center;gap:10px;font:500 12px/1 var(--mono);letter-spacing:.14em;color:var(--teal)}
+.kicker::before{content:"";width:10px;height:10px;border-radius:2px;background:var(--red);box-shadow:14px 0 0 var(--teal);margin-right:14px}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--ink) 86%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:24px;min-height:68px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-width:0}
+.logo{flex:none;width:36px;height:36px;border-radius:8px;background:var(--red);display:grid;place-items:center;color:#fff;font:400 19px/1 var(--display)}
+.brand strong{display:block;font:400 21px/1.1 var(--display);letter-spacing:.06em;white-space:nowrap}
+.brand small{display:block;font:500 10px/1.4 var(--mono);color:var(--muted);letter-spacing:.16em;margin-top:3px;white-space:nowrap}
+.nav{display:flex;gap:4px;margin-left:auto}
+.nav a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--muted);font-size:14px}
+.nav a:hover{color:var(--fg);background:var(--panel)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--line-2);background:transparent;padding:12px 20px;border-radius:10px;font-weight:500;text-decoration:none;transition:background .2s,border-color .2s,transform .2s;white-space:nowrap}
+.btn:hover{border-color:var(--fg)}
+.btn-teal{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)}
+.btn-teal:hover{background:#52c9d6;border-color:#52c9d6;transform:translateY(-1px)}
+.top .btn{margin-left:auto}
+.nav + .btn{margin-left:0}
+.btn svg{width:16px;height:16px}
+
+/* hero */
+.hero .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(20px,3vw,48px);align-items:center;padding-block:clamp(28px,5vw,64px) 40px}
+.hero-copy{min-width:0;display:grid;gap:24px}
+.hero h1{font:400 clamp(40px,5.2vw,70px)/1.12 var(--display);letter-spacing:.03em}
+.hero h1 em{font-style:normal;color:var(--teal)}
+.lead{color:var(--muted);max-width:32em;margin:0;font-size:16px}
+.lead b{color:var(--fg);font-weight:500}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);padding-top:20px;gap:12px}
+.stat b{display:block;font:500 clamp(22px,2.4vw,30px)/1.1 var(--mono);font-variant-numeric:tabular-nums}
+.stat b small{font-size:.5em;color:var(--muted);margin-left:2px}
+.stat b.red{color:var(--red)}
+.stat span{font-size:12.5px;color:var(--muted)}
+
+/* 3D stage */
+.stage{position:relative;height:clamp(420px,64vh,640px);border-radius:20px;overflow:hidden;background:radial-gradient(120% 90% at 60% 30%,#1d3236 0%,#10201f 55%,#0a1414 100%);border:1px solid var(--line)}
+.stage.night{background:radial-gradient(120% 90% at 60% 30%,#122326 0%,#071012 60%,#040909 100%)}
+.stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.stage-ui{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.stage-ui > *{pointer-events:auto}
+.presets{position:absolute;top:14px;right:14px;display:flex;flex-wrap:wrap;gap:4px;padding:4px;background:rgba(9,18,20,.74);border:1px solid var(--line);border-radius:10px;max-width:calc(100% - 28px);z-index:2}
+.presets button{border:0;background:transparent;padding:6px 10px;border-radius:7px;font-size:12.5px;color:var(--muted)}
+.presets button[aria-pressed="true"]{background:var(--teal);color:var(--teal-ink)}
+.tools{position:absolute;right:14px;bottom:14px;display:flex;gap:2px;padding:4px;background:rgba(9,18,20,.74);border:1px solid var(--line);border-radius:10px;z-index:2}
+.tools button{width:34px;height:34px;border:0;background:transparent;border-radius:7px;display:grid;place-items:center;color:var(--muted)}
+.tools button:hover,.tools button[aria-pressed="true"]{color:var(--fg);background:var(--panel-2)}
+.tools svg{width:17px;height:17px}
+.legend{position:absolute;left:16px;top:16px;display:flex;flex-direction:column;gap:4px;font:12px/1.4 var(--mono);color:var(--muted);pointer-events:none;z-index:2}
+.legend span{display:flex;align-items:center;gap:8px}
+.legend i{width:10px;height:10px;border-radius:2px;background:var(--red)}
+.legend i.o{background:#c9ced0}
+.stage-note{position:absolute;left:16px;bottom:16px;font:12px/1.5 var(--mono);color:var(--dim);pointer-events:none;z-index:2}
+.stage-note b{display:block;color:var(--muted);font-weight:500}
+.hotspot{position:absolute;left:0;top:0;display:flex;align-items:center;gap:8px;padding:6px 11px 6px 9px;border-radius:999px;border:1px solid var(--red);background:rgba(12,22,24,.86);font-size:12.5px;white-space:nowrap;transform:translate(-50%,-130%);transition:opacity .25s}
+.hotspot::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px var(--red-soft)}
+.hotspot.gate{border-color:var(--gold)}
+.hotspot.gate::before{background:var(--gold);box-shadow:0 0 0 4px rgba(233,191,90,.2)}
+.hotspot:hover{background:var(--panel-2)}
+.hotspot[data-off="1"]{opacity:0;pointer-events:none}
+.tag{position:absolute;left:0;top:0;transform:translate(-50%,-50%);font:500 11px/1 var(--mono);color:#dfe6e6;background:rgba(12,22,24,.62);padding:3px 6px;border-radius:5px;pointer-events:none!important;white-space:nowrap;transition:opacity .25s}
+.tag[data-off="1"]{opacity:0}
+.stage.no-tags .tag{opacity:0}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font:13px var(--mono);pointer-events:none}
+.fallback{position:absolute;inset:0;display:grid;place-content:center;gap:8px;text-align:center;padding:24px;color:var(--muted)}
+
+/* immersive */
+.stage.immersive{position:fixed;inset:0;z-index:60;border-radius:0;border:0;height:auto}
+.stage.immersive .presets,.stage.immersive .tools,.stage.immersive .stage-note,.stage.immersive .legend{display:none}
+.hud{position:fixed;inset:0;z-index:61;display:none;flex-direction:column;gap:14px;padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));pointer-events:none;transition:background .5s}
+@media (min-width:700px){.hud{padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}}
+.hud.on{display:flex}
+.hud.inside{background:linear-gradient(180deg,rgba(8,16,18,.92),rgba(8,16,18,.74) 40%,rgba(8,16,18,.92));backdrop-filter:blur(6px);pointer-events:auto}
+.hud > *{pointer-events:auto}
+.hud-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hud-top .brand{pointer-events:none}
+.hud-top .spacer{width:120px}
+.ghost{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;border:1px solid var(--line-2);background:rgba(12,22,24,.82);white-space:nowrap}
+.ghost:hover{border-color:var(--fg)}
+.ghost svg{width:16px;height:16px}
+.hud-title{pointer-events:none!important;display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:6px 24px;max-width:1080px;width:100%;margin-inline:auto}
+.hud-title > div{min-width:0}
+.hud-title h2{font:400 clamp(28px,3.4vw,44px)/1.15 var(--display);margin-top:8px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.hud-title h2 span{font:500 14px var(--mono);color:var(--muted)}
+.hud-title p{margin:0;color:var(--muted);max-width:36em;min-width:0}
+.journey{position:absolute;left:50%;bottom:calc(120px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:grid;justify-items:center;gap:14px;padding:20px 26px;border-radius:16px;background:rgba(12,22,24,.82);border:1px solid var(--line);backdrop-filter:blur(8px);max-width:calc(100% - 32px)}
+.journey ol{display:flex;gap:26px;margin:0;padding:0;list-style:none}
+.journey li{display:grid;justify-items:center;gap:6px;font-size:13px;color:var(--dim);white-space:nowrap;text-align:center}
+.journey li span{width:28px;height:28px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;font:500 12px var(--mono)}
+.journey li.now{color:var(--fg)}
+.journey li.now span{border-color:var(--teal);color:var(--teal);box-shadow:0 0 0 4px rgba(47,181,196,.18)}
+.journey li.done span{background:var(--teal);border-color:var(--teal);color:var(--teal-ink)}
+.journey button{border:0;background:none;color:var(--muted);font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.fade{position:fixed;inset:0;z-index:62;background:var(--ink);opacity:0;pointer-events:none;transition:opacity .45s}
+.fade.on{opacity:1}
+.viewer{flex:1;min-height:0;width:100%;max-width:1080px;margin-inline:auto;display:none;grid-template-rows:minmax(0,1fr) auto;gap:10px}
+.viewer.on{display:grid;animation:rise .5s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.frame{position:relative;min-height:200px;width:100%;border-radius:14px;overflow:hidden;background:#060c0d;border:1px solid var(--line-2);cursor:zoom-in;touch-action:none}
+.frame.zoomed{cursor:grab}
+.frame.isvideo{cursor:default;touch-action:auto}
+.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:transform .35s ease,opacity .3s;user-select:none;-webkit-user-drag:none}
+.frame.dragging img{transition:opacity .3s}
+.frame .blur{object-fit:cover;filter:blur(28px) brightness(.42);transform:scale(1.2)}
+.frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:transparent}
+.badge{position:absolute;left:12px;top:12px;font:500 11px var(--mono);letter-spacing:.08em;padding:4px 8px;border-radius:6px;background:var(--red);color:#fff;pointer-events:none}
+.photo-nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:1px solid var(--line-2);background:rgba(12,22,24,.84);display:grid;place-items:center;z-index:2}
+.photo-nav svg{width:18px;height:18px}
+.photo-nav.prev{left:12px}.photo-nav.next{right:12px}
+.viewer-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;font-size:13px;color:var(--muted)}
+.viewer-bar .cap{flex:1 1 240px;min-width:0;color:var(--fg)}
+.seg{display:inline-flex;padding:3px;border-radius:9px;background:rgba(12,22,24,.86);border:1px solid var(--line)}
+.seg button{border:0;background:none;padding:5px 12px;border-radius:7px;font-size:12.5px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--panel-2);color:var(--fg)}
+.count{font:500 12px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.strip{margin-top:auto;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;max-width:1080px;width:100%;margin-inline:auto}
+.strip::-webkit-scrollbar{display:none}
+.strip button{flex:1 0 140px;border:1px solid var(--line);border-radius:10px;background:rgba(12,22,24,.88);padding:0;overflow:hidden;text-align:left}
+.strip img{width:100%;height:54px;object-fit:cover;opacity:.7}
+.strip span{display:block;padding:6px 9px;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.strip span i{font:500 11px var(--mono);font-style:normal;color:var(--dim);margin-right:6px}
+.strip button[aria-current="true"]{border-color:var(--teal)}
+.strip button[aria-current="true"] img{opacity:1}
+
+/* sections */
+section.block{padding-block:clamp(56px,8vw,104px);border-top:1px solid var(--line)}
+.head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px 32px;margin-bottom:36px}
+.head > div{min-width:0;display:grid;gap:14px}
+.head h2{font:400 clamp(30px,3.6vw,46px)/1.15 var(--display)}
+.head p{margin:0;color:var(--muted);max-width:36em}
+.spaces{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{border:1px solid var(--line);background:var(--panel);border-radius:var(--r);padding:0;overflow:hidden;text-align:left;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--teal);transform:translateY(-2px)}
+.card .ph{position:relative;aspect-ratio:16/10;overflow:hidden;max-width:100%}
+.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.card:hover .ph img{transform:scale(1.05)}
+.card .no{position:absolute;left:10px;top:10px;font:500 11px var(--mono);background:rgba(12,22,24,.82);padding:3px 8px;border-radius:6px}
+.card .pc{position:absolute;right:10px;top:10px;font:500 11px var(--mono);background:rgba(12,22,24,.82);padding:3px 8px;border-radius:6px;color:var(--muted)}
+.card .tx{padding:14px 16px 18px;display:grid;gap:6px}
+.card .bl{display:flex;align-items:center;gap:8px;font:500 12px var(--mono);color:var(--muted)}
+.card .bl b{font-weight:500;color:#fff;background:var(--red);padding:2px 7px;border-radius:5px}
+.card .bl b.g{background:var(--gold);color:#2a1e02}
+.card strong{font-size:17px;font-weight:500}
+.card small{color:var(--muted);font-size:13px;line-height:1.6}
+.note{margin-top:18px;font-size:12.5px;color:var(--dim)}
+
+.videos{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:14px;align-items:start}
+.vid{margin:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--panel)}
+.vid video{display:block;width:100%;background:#000}
+.vid.wide video{aspect-ratio:16/9}
+.vid.tall video{aspect-ratio:9/16;max-height:640px}
+.vid figcaption{padding:12px 16px;display:grid;gap:2px}
+.vid figcaption b{font-weight:500}
+.vid figcaption span{font-size:13px;color:var(--muted)}
+
+.free{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.fig{border:1px solid var(--line);border-radius:var(--r);padding:22px 22px 24px;display:grid;gap:8px;align-content:start;min-width:0}
+.fig.hi{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)}
+.fig.hi p{color:rgba(3,24,27,.78)}
+.fig b{font:400 clamp(30px,3.2vw,40px)/1.1 var(--display)}
+.fig h3{font-size:15px;font-weight:500;color:var(--muted)}
+.fig.hi h3{color:rgba(3,24,27,.7)}
+.fig p{margin:0;color:var(--muted);font-size:13.5px}
+.svc{margin-top:14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.svc article{border:1px solid var(--line);border-radius:var(--r);padding:24px;display:grid;gap:14px;align-content:start;min-width:0;background:var(--panel)}
+.svc h3{font:400 24px/1.2 var(--display)}
+.svc h3 span{display:block;font:500 11px var(--mono);color:var(--teal);letter-spacing:.14em;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.chips li{padding:5px 11px;border-radius:999px;background:var(--panel-2);font-size:13px}
+.quote{margin-top:14px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center;border-radius:var(--r);padding:20px 24px;border:1px solid var(--line)}
+.quote .bar{width:10px;align-self:stretch;border-radius:4px;background:linear-gradient(var(--red) 50%,var(--teal) 50%)}
+.quote p{margin:0;color:var(--muted)}
+.quote b{color:var(--fg);font-weight:500}
+
+.loc{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(20px,3vw,40px);align-items:start}
+.plan{margin:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--paper)}
+.plan-scroll{overflow-x:auto}
+.plan svg{display:block;width:100%;min-width:560px;height:auto}
+.plan svg .b rect{fill:#cfd5d6;stroke:#9aa5a7;stroke-width:2}
+.plan svg .b text{fill:#36484b;font:500 22px var(--body)}
+.plan svg .b text.s{font-size:15px;fill:#5f7073}
+.plan svg .f{cursor:pointer}
+.plan svg .f rect{fill:#e2392f;stroke:#b5241c}
+.plan svg .f text,.plan svg .f text.s{fill:#fff}
+.plan svg .f:hover rect,.plan svg .f:focus-visible rect{fill:#f04b40}
+.plan svg .f:focus{outline:none}
+.plan figcaption{padding:10px 14px;font-size:12.5px;color:var(--paper-ink);border-top:1px solid #dcdcd6}
+.addr{font:400 clamp(22px,2.4vw,28px)/1.4 var(--display);margin:0 0 20px}
+.facts{display:grid;gap:0;margin:0}
+.facts > div{display:grid;grid-template-columns:5.5em minmax(0,1fr);gap:16px;padding:14px 0;border-top:1px solid var(--line)}
+.facts dt{color:var(--dim);font-size:13px}
+.facts dd{margin:0;font-size:14px;min-width:0}
+.tel{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.tel span{font:500 18px var(--mono);letter-spacing:.04em;user-select:all}
+.tel button{border:1px solid var(--line-2);background:none;border-radius:7px;padding:4px 10px;font-size:12.5px;color:var(--muted)}
+.tel button:hover{color:var(--fg);border-color:var(--fg)}
+.zones{display:grid;gap:4px}
+.zones span{display:flex;gap:8px}
+.zones i{font:500 12px var(--mono);font-style:normal;color:var(--red);min-width:2.6em}
+
+footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--dim);font-size:12.5px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 24px}
+
+@media (max-width:1020px){
+  .hero .wrap{grid-template-columns:1fr}
+  .spaces{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .svc,.loc{grid-template-columns:1fr}
+  .free{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nav{display:none}
+}
+@media (max-width:700px){
+  .videos{grid-template-columns:1fr}
+  .vid.tall{max-width:380px;width:100%;justify-self:center}
+}
+@media (max-width:560px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .spaces,.free{grid-template-columns:1fr}
+  .journey{padding:16px}.journey ol{gap:12px}.journey li{font-size:12px;white-space:normal;max-width:6.5em}
+  .hud-top .brand,.hud-top .spacer{display:none}
+  .strip button{flex:0 0 120px}.strip img{height:44px}
+  .photo-nav{width:36px;height:36px}
+  .presets button{padding:5px 8px;font-size:12px}
+  .stage-note,.legend{display:none}
+  .top .btn{padding:10px 14px}
+  .brand small{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="logo">惠</span><span><strong>惠企共产小院</strong><small>HUIQI CO-OP COURTYARD</small></span></a>
+    <nav class="nav" aria-label="页面导航">
+      <a href="#top">3D 小院</a><a href="#spaces">功能区实景</a><a href="#videos">宣传视频</a><a href="#services">免费服务</a><a href="#location">位置</a>
+    </nav>
+    <button class="btn btn-teal" data-enter="gate" type="button">走进小院<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="kicker">海口 · 海甸岛 · 亚龙别墅</span>
+        <h1>一座院子，<br><em>共建共创</em>，<br>共享共产。</h1>
+        <p class="lead">创之星惠企共产小院在亚龙别墅里，海南大学北门斜对面。小院 19 栋楼里，<b>标红的 5 栋是功能楼</b>：孵化器、城市会客厅、共产经济实验室、项目路演舞台和共创驿站。开公司、吃饭、办公、住宿全部免费。</p>
+        <div class="actions">
+          <button class="btn btn-teal" data-enter="gate" type="button">从大门走进小院<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+          <a class="btn" href="#spaces">浏览 5 栋功能楼</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>19<small>栋</small></b><span>亚龙别墅楼栋</span></div>
+          <div class="stat"><b class="red">5<small>栋</small></b><span>小院功能楼</span></div>
+          <div class="stat"><b>4<small>项</small></b><span>开公司·吃·住·办公免费</span></div>
+          <div class="stat"><b>24<small>h</small></b><span>共享会议室开放</span></div>
+        </div>
+      </div>
+
+      <div class="stage" id="stage">
+        <div class="loading" id="loading">正在搭建亚龙别墅…</div>
+        <div class="stage-ui" id="stageUi">
+          <div class="legend" aria-hidden="true"><span><i></i>功能楼 · 可进入</span><span><i class="o"></i>别墅其他楼栋</span></div>
+          <div class="presets" role="group" aria-label="观察视角">
+            <button type="button" data-view="0" aria-pressed="true">全景</button>
+            <button type="button" data-view="1">大门口</button>
+            <button type="button" data-view="2">大树水池</button>
+            <button type="button" data-view="3">俯瞰</button>
+          </div>
+          <div class="stage-note"><b>亚龙别墅 · 3D 示意建模</b>拖动旋转 · 滚轮或双指缩放 · 点红色标签进入</div>
+          <div class="tools" role="group" aria-label="模型控制">
+            <button type="button" id="tRotate" aria-pressed="true" title="自动旋转" aria-label="自动旋转"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
+            <button type="button" id="tFocus" aria-pressed="false" title="只看功能楼" aria-label="只看功能楼"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/></svg></button>
+            <button type="button" id="tTags" aria-pressed="true" title="显示楼号" aria-label="显示楼号"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></button>
+            <button type="button" id="tNight" aria-pressed="false" title="夜景" aria-label="切换夜景"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+            <button type="button" id="tIn" title="放大" aria-label="放大"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <button type="button" id="tOut" title="缩小" aria-label="缩小"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg></button>
+            <button type="button" id="tReset" title="重置视角" aria-label="重置视角"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="spaces">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="kicker">功能区实景 · 按参观路线排列</span><h2>从大门口，走进 5 栋功能楼</h2></div>
+        <p>点开任意一处，镜头会从亚龙别墅大门外靠近、穿过小院，停在这栋楼门口，再展开它的实景照片和视频。</p>
+      </div>
+      <div class="spaces" id="spaceGrid"></div>
+      <p class="note">照片取自《惠企共产小院各功能区划实景图》，视频为小院航拍与宣传片。</p>
+    </div>
+  </section>
+
+  <section class="block" id="videos">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="kicker">宣传视频</span><h2>先在视频里逛一圈</h2></div>
+        <p>航拍从院内飞向大树和 D 栋孵化器；宣传片里，主持人从共产经济实验室门口出发，带你看完食堂、服务大厅和 24 小时会议室。</p>
+      </div>
+      <div class="videos">
+        <figure class="vid wide"><video controls playsinline preload="none" poster="assets/drone-poster.jpg" src="assets/drone.mp4"></video><figcaption><b>航拍 · 亚龙别墅小院</b><span>16 秒 · 无声</span></figcaption></figure>
+        <figure class="vid tall"><video controls playsinline preload="none" poster="assets/promo-poster.jpg" src="assets/promo.mp4"></video><figcaption><b>宣传片 · 走进惠企共创孵化基地</b><span>84 秒 · 有声</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="services">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="kicker">免费服务</span><h2>开公司、吃饭、办公、住宿，全免费</h2></div>
+        <p>小院门头写着“共建共创 · 共享共产”。创业者从注册公司到落脚住下，需要的基础条件在院子里都能免费拿到。</p>
+      </div>
+      <div class="free">
+        <div class="fig hi"><h3>开公司</h3><b>免费</b><p>一站式服务大厅办理公司注册、税务登记和政策咨询。</p></div>
+        <div class="fig"><h3>吃饭</h3><b>免费</b><p>饭菜每天新鲜现做，吃的和大学生食堂同款。</p></div>
+        <div class="fig"><h3>办公</h3><b>免费</b><p>D 栋共享孵化区的开放工位与独立办公区。</p></div>
+        <div class="fig"><h3>住宿</h3><b>免费</b><p>小院里的芳甸民宿、春春民宿、喜鹊客栈。</p></div>
+      </div>
+      <div class="svc">
+        <article><h3><span>ONE-STOP</span>一站式服务</h3><ul class="chips"><li>公司注册</li><li>税务登记</li><li>政策咨询</li><li>各类业务办理</li></ul></article>
+        <article><h3><span>SHARED SPACE</span>共享空间</h3><ul class="chips"><li>24 小时共享会议室</li><li>城市会客厅</li><li>项目路演舞台</li><li>共享孵化工位</li><li>独立办公室</li><li>创客餐吧</li></ul></article>
+        <article><h3><span>ECOSYSTEM</span>创业生态</h3><ul class="chips"><li>企业导师驻场指导</li><li>定期投融资对接会</li><li>传统行业企业家讲课</li><li>电商与设计团队互相合作</li></ul></article>
+      </div>
+      <div class="quote"><span class="bar" aria-hidden="true"></span><p><b>3 天办完全部手续。</b>宣传片里讲到，小院上周刚帮一个大学生团队 3 天办完了开公司的所有手续。入驻的电商、设计团队会主动互相合作，在别处很难遇到。</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="location">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="kicker">位置</span><h2>海南大学北门斜对面，亚龙别墅里</h2></div>
+        <p>下面是小院的楼栋分布图。红色 5 栋是功能楼，点一下即可从大门走进去。</p>
+      </div>
+      <div class="loc">
+        <figure class="plan">
+          <div class="plan-scroll"><svg id="planSvg" viewBox="90 80 1190 715" role="group" aria-label="亚龙别墅楼栋分布图"></svg></div>
+          <figcaption>亚龙别墅楼栋分布示意 · 大门在东侧两根门柱之间</figcaption>
+        </figure>
+        <div>
+          <p class="addr">海口市美兰区人民街道<br>宜兴路 2 号 · 亚龙别墅</p>
+          <dl class="facts">
+            <div><dt>周边</dt><dd>海南大学北门斜对面，走几步就到大学校园</dd></div>
+            <div><dt>功能楼</dt><dd class="zones">
+              <span><i>D</i>惠企共创孵化器</span>
+              <span><i>B2</i>惠企城市会客厅</span>
+              <span><i>C</i>春春民宿 · 共产经济实验室</span>
+              <span><i>B6</i>芳甸民宿 · 项目路演舞台</span>
+              <span><i>A1</i>喜鹊客栈 · 惠企共创驿站</span>
+            </dd></div>
+            <div><dt>院内邻居</dt><dd>B7 薪家民宿 · B4 哈尼熊托育 · B1 思嘉小院</dd></div>
+            <div><dt>创业热线</dt><dd class="tel"><span id="telNo">133 3750 1127</span><button type="button" id="copyTel">复制号码</button></dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><span>创之星惠企共产小院 · 启明星社会企业创业孵化基地 · 海口亚龙别墅</span><span>3D 建筑为示意建模，楼栋位置依据小院分布图，尺寸与细节以现场为准</span></div>
+</footer>
+
+<div class="fade" id="fade"></div>
+<div class="hud" id="hud" role="dialog" aria-modal="true" aria-label="走进惠企共产小院">
+  <div class="hud-top">
+    <button class="ghost" id="leave" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>返回全景</button>
+    <span class="brand"><span class="logo">惠</span><span><strong>惠企共产小院</strong><small>STEP INSIDE</small></span></span>
+    <span class="spacer" aria-hidden="true"></span>
+  </div>
+  <div class="hud-title">
+    <div><span class="kicker" id="hudKicker">走进小院</span><h2 id="hudName">小院大门<span id="hudNo">01</span></h2></div>
+    <p id="hudPoints"></p>
+  </div>
+  <div class="journey" id="journey">
+    <ol><li data-s="1"><span>1</span>靠近亚龙别墅</li><li data-s="2"><span>2</span><em style="font-style:normal" id="j2">穿过大门</em></li><li data-s="3"><span>3</span><em style="font-style:normal" id="j3">走进功能楼</em></li></ol>
+    <button type="button" id="skip">跳过运镜</button>
+  </div>
+  <div class="viewer" id="viewer">
+    <div class="frame" id="frame" tabindex="0" aria-label="实景照片：双击或按加号放大，放大后可拖动">
+      <img class="blur" id="photoBlur" alt="">
+      <img id="photo" alt="" draggable="false">
+      <video id="vid" playsinline controls preload="metadata" hidden></video>
+      <span class="badge" id="vBadge" hidden>视频</span>
+      <button class="photo-nav prev" id="pPrev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button class="photo-nav next" id="pNext" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+    <div class="viewer-bar">
+      <span class="cap" id="cap"></span>
+      <span class="count" id="count"></span>
+      <span class="seg" id="seg" role="group" aria-label="查看方式"><button type="button" id="vFull" aria-pressed="true">完整画面</button><button type="button" id="vZoom" aria-pressed="false">放大细看</button></span>
+    </div>
+  </div>
+  <nav class="strip" id="strip" aria-label="切换功能区"></nav>
+</div>
+
+<script>
+/* 楼栋：依据《亚龙别墅位置图》上的方框坐标（像素），fn=功能楼，dir=正门朝向 */
+window.BLD=[
+  {id:"B7",x1:107,x2:260,y1:145,y2:252,sub:"薪家民宿",dir:[0,1]},
+  {id:"B6",x1:268,x2:552,y1:143,y2:255,sub:"芳甸民宿（项目路演舞台）",fn:"b6",dir:[0,1],dist:3.3},
+  {id:"B5",x1:563,x2:717,y1:150,y2:258,dir:[0,1]},
+  {id:"B4",x1:728,x2:890,y1:150,y2:258,sub:"哈尼熊托育",dir:[0,1]},
+  {id:"C",x1:898,x2:1190,y1:150,y2:255,sub:"春春民宿 · 共产经济实验室",fn:"c",dir:[0,1],dist:5},
+  {id:"A8",x1:110,x2:263,y1:300,y2:408,dir:[0,-1]},
+  {id:"A7",x1:298,x2:451,y1:306,y2:413,dir:[0,-1]},
+  {id:"D",x1:478,x2:693,y1:306,y2:420,sub:"惠企共创孵化器",fn:"d",dir:[0,-1],dist:3},
+  {id:"A10",x1:110,x2:263,y1:458,y2:566,dir:[0,-1]},
+  {id:"A9",x1:302,x2:455,y1:463,y2:571,dir:[0,-1]},
+  {id:"A6",x1:488,x2:642,y1:461,y2:569,dir:[0,-1]},
+  {id:"A5",x1:674,x2:827,y1:464,y2:572,dir:[0,-1]},
+  {id:"B3",x1:1061,x2:1155,y1:440,y2:516,dir:[-1,0]},
+  {id:"B2",x1:1000,x2:1222,y1:533,y2:636,sub:"惠企城市会客厅",fn:"b2",dir:[-1,0],dist:5.5},
+  {id:"A1",x1:110,x2:415,y1:630,y2:737,sub:"喜鹊客栈 · 惠企共创驿站",fn:"a1",dir:[0,-1],dist:3.8},
+  {id:"A2",x1:488,x2:641,y1:628,y2:735,dir:[0,-1]},
+  {id:"B1",x1:1043,x2:1196,y1:665,y2:773,sub:"思嘉小院",dir:[-1,0]}
+];
+window.SPACES=[
+  {id:"gate",name:"小院大门",bld:"大门",tag:"亚龙别墅 · 东门",desc:"亚龙别墅的门柱旁，挂着“创之星惠企共创孵化基地”的红色招牌：开公司、吃饭、办公、住宿全免费。进门就是小院。",
+   media:[{k:"gate",c:"亚龙别墅大门，右侧是创之星惠企共创孵化基地招牌"},{v:"drone",c:"航拍：从小院上空飞向大树和 D 栋",auto:1},{v:"promo",c:"宣传片：主持人带你逛一圈惠企共创孵化基地（有声，84 秒）"}]},
+  {id:"c",name:"共产经济实验室",bld:"C",tag:"春春民宿",desc:"进门第一栋。一楼挂着“共产经济实验室（免费使用）”“惠企青年创客驿站”“城市会客厅（社区共享会议室）”三块门牌，扫码即可免费预约。",
+   media:[{k:"c",c:"C 栋门前，一楼是共产经济实验室和创客驿站"},{k:"c-lab",c:"三块门牌：共产经济实验室 · 惠企青年创客驿站 · 城市会客厅"},{k:"c-meet",c:"C 栋共享会议室里的交流会"}]},
+  {id:"b2",name:"惠企城市会客厅",bld:"B2",tag:"惠企青年共享驿站",desc:"门头写着“惠企青年共享驿站 · 城市会客厅”，也是启明星社会企业创业孵化基地的会议室，长桌开会、培训、洽谈都在这里。",
+   media:[{k:"b2",c:"B2 栋门头：惠企青年共享驿站 · 城市会客厅"},{k:"b2-hall",c:"城市会客厅里的长桌会议"}]},
+  {id:"d",name:"惠企共创孵化器",bld:"D",tag:"共享孵化区 · 独立办公区",desc:"楼体挂着“创之星惠企共产小院 · 启明星社会企业创业孵化基地”大招牌。楼内是开放工位的共享孵化区和玻璃隔断的独立办公区。",
+   media:[{k:"d",c:"D 栋外立面，大榕树下的孵化器招牌"},{k:"d-share",c:"共享孵化区的开放工位"},{k:"d-office",c:"玻璃隔断的独立办公区"}]},
+  {id:"b6",name:"项目路演舞台",bld:"B6",tag:"芳甸民宿",desc:"门头写着“共建共创 · 共享共产”。院子绿荫下是项目路演舞台，楼里有共享会议室和单独办公室。",
+   media:[{k:"b6",c:"B6 栋门口：共建共创 · 共享共产"},{k:"b6-stage",c:"绿荫下的项目路演舞台"},{k:"b6-meet",c:"B6 栋共享会议室"},{k:"b6-meet-2",c:"共享会议室的另一侧"},{k:"b6-office",c:"B6 栋单独办公室"}]},
+  {id:"a1",name:"惠企共创驿站",bld:"A1",tag:"喜鹊客栈",desc:"“创之星惠企共创驿站”的前台在这里。楼里还有创客共享驿站，和提供免费餐食的创客餐吧。",
+   media:[{k:"a1",c:"A1 栋外观，喜鹊客栈"},{k:"a1-front",c:"惠企共创驿站前台"},{k:"a1-station",c:"创客共享驿站走廊"},{k:"a1-bar",c:"创客餐吧"}]}
+];
+</script>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script>
+// Non-3D UI: cards, site plan, media viewer. Works even if WebGL / CDN fails.
+(function(){
+  const S=window.SPACES, $=id=>document.getElementById(id), pad=n=>String(n).padStart(2,"0");
+  const thumb=m=>m.k?`assets/${m.k}-s.jpg`:`assets/${m.v}-poster-s.jpg`;
+  const grid=$("spaceGrid");
+  S.forEach((s,i)=>{
+    const b=document.createElement("button");b.type="button";b.className="card";b.dataset.enter=s.id;
+    const nv=s.media.filter(m=>m.v).length,np=s.media.length-nv;
+    b.innerHTML=`<span class="ph"><img src="${thumb(s.media[0])}" alt="${s.media[0].c}" loading="lazy"><span class="no">${pad(i+1)}</span><span class="pc">${np} 张${nv?` · ${nv} 段视频`:""}</span></span><span class="tx"><span class="bl"><b class="${s.id==="gate"?"g":""}">${s.bld==="大门"?"大门":s.bld+" 栋"}</b>${s.tag}</span><strong>${s.name}</strong><small>${s.desc}</small></span>`;
+    grid.appendChild(b);
+  });
+  const strip=$("strip");
+  S.forEach((s,i)=>{
+    const b=document.createElement("button");b.type="button";b.dataset.go=s.id;
+    b.innerHTML=`<img src="${thumb(s.media[0])}" alt=""><span><i>${pad(i+1)}</i>${s.bld==="大门"?"":s.bld+" · "}${s.name}</span>`;
+    strip.appendChild(b);
+  });
+
+  // site plan
+  const svg=$("planSvg"),NS="http://www.w3.org/2000/svg";
+  const mk=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e;};
+  mk("rect",{x:90,y:80,width:1190,height:715,fill:"#f3f2ee"});
+  // pool, tree, gate
+  mk("path",{d:"M722 320 C 760 300 800 345 875 322 L 880 418 C 820 440 780 395 724 420 Z",fill:"#cfe6ee",stroke:"#8fb9c8","stroke-width":2});
+  mk("text",{x:800,y:378,"text-anchor":"middle",fill:"#3e6676","font-size":20});
+  svg.lastChild.textContent="水池";
+  mk("circle",{cx:935,cy:322,r:30,fill:"#4f9a5c"});
+  mk("text",{x:935,y:329,"text-anchor":"middle",fill:"#fff","font-size":18}).textContent="大树";
+  [[1202,100,48,107],[1210,336,48,107]].forEach(([x,y,w,h])=>{mk("rect",{x,y,width:w,height:h,rx:6,fill:"#7d8789"});});
+  const gt=mk("g",{class:"f",tabindex:0,role:"button","aria-label":"大门，走进小院"});gt.dataset.enter="gate";
+  mk("rect",{x:1206,y:215,width:44,height:113,rx:6,fill:"#e9bf5a",stroke:"#b88f2c"},gt).style.fill="#e9bf5a";
+  mk("text",{x:1228,y:262,"text-anchor":"middle",fill:"#2a1e02","font-size":20},gt).textContent="大";gt.lastChild.style.fill="#2a1e02";
+  mk("text",{x:1228,y:290,"text-anchor":"middle",fill:"#2a1e02","font-size":20},gt).textContent="门";gt.lastChild.style.fill="#2a1e02";
+  window.BLD.forEach(b=>{
+    const g=mk("g",{class:b.fn?"b f":"b"});
+    if(b.fn){g.dataset.enter=b.fn;g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label",`${b.id} 栋 ${b.sub}，走进去`);}
+    mk("rect",{x:b.x1,y:b.y1,width:b.x2-b.x1,height:b.y2-b.y1,rx:12},g);
+    const cx=(b.x1+b.x2)/2,cy=(b.y1+b.y2)/2,small=(b.x2-b.x1)<120;
+    mk("text",{x:cx,y:b.sub&&!small?cy-6:cy+8,"text-anchor":"middle"},g).textContent=b.id+" 栋";
+    if(b.sub&&!small){const t=mk("text",{x:cx,y:cy+20,"text-anchor":"middle",class:"s"},g);t.textContent=b.sub;}
+  });
+  svg.addEventListener("keydown",e=>{const g=e.target.closest("[data-enter]");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();g.dispatchEvent(new MouseEvent("click",{bubbles:true}));}});
+
+  $("copyTel").onclick=()=>{const t="13337501127",btn=$("copyTel");
+    const sel=()=>{const r=document.createRange();r.selectNodeContents($("telNo"));const s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent="已选中，可复制";};
+    try{navigator.clipboard.writeText(t).then(()=>btn.textContent="已复制",sel);}catch(e){sel();}};
+
+  // media viewer
+  const V={space:null,idx:0,zoom:false,pan:{x:0,y:0}};
+  const frame=$("frame"),img=$("photo"),blur=$("photoBlur"),vid=$("vid");
+  function apply(){const sc=V.zoom?1.9:1;img.style.transform=`translate(${V.zoom?V.pan.x:0}px,${V.zoom?V.pan.y:0}px) scale(${sc})`;frame.classList.toggle("zoomed",V.zoom);$("vFull").setAttribute("aria-pressed",!V.zoom);$("vZoom").setAttribute("aria-pressed",V.zoom);}
+  function setZoom(z){if(isVid())z=false;V.zoom=z;V.pan={x:0,y:0};apply();}
+  const isVid=()=>!!(V.space&&V.space.media[V.idx].v);
+  function stopVideo(){try{vid.pause();}catch(e){}}
+  function show(){
+    const s=V.space,m=s.media[V.idx];
+    stopVideo();
+    $("cap").textContent=m.c;
+    $("count").textContent=s.media.length>1?`${V.idx+1} / ${s.media.length}`:"";
+    $("pPrev").hidden=$("pNext").hidden=s.media.length<2;
+    if(m.v){
+      frame.classList.add("isvideo");img.hidden=true;vid.hidden=false;$("vBadge").hidden=false;$("seg").hidden=true;
+      blur.src=`assets/${m.v}-poster-s.jpg`;
+      vid.poster=`assets/${m.v}-poster.jpg`;vid.src=`assets/${m.v}.mp4`;vid.loop=!!m.auto;vid.muted=!!m.auto;
+      if(m.auto&&window.Viewer.active()){const p=vid.play();p&&p.catch(()=>{});}
+    }else{
+      frame.classList.remove("isvideo");vid.hidden=true;vid.removeAttribute("src");try{vid.load();}catch(e){}img.hidden=false;$("vBadge").hidden=true;$("seg").hidden=false;
+      img.style.opacity=0;const src=`assets/${m.k}.jpg`;
+      const pre=new Image();pre.onload=pre.onerror=()=>{if(V.space!==s||s.media[V.idx]!==m)return;img.src=src;blur.src=`assets/${m.k}-s.jpg`;img.alt=m.c;img.style.opacity=1;};pre.src=src;
+    }
+    setZoom(false);
+  }
+  function setSpace(id,idx){
+    const i=S.findIndex(s=>s.id===id);V.space=S[i];V.idx=idx||0;
+    $("hudName").firstChild.nodeValue=(V.space.bld==="大门"?"":V.space.bld+" 栋 · ")+V.space.name;$("hudNo").textContent=pad(i+1);
+    $("hudPoints").textContent=V.space.desc;
+    $("j3").textContent=V.space.id==="gate"?"看见小院大门":`走进 ${V.space.bld} 栋`;
+    $("j2").textContent=V.space.id==="gate"?"来到门口":"穿过小院";
+    strip.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current",b.dataset.go===id?"true":"false"));
+    const cur=strip.querySelector(`[data-go="${id}"]`);cur&&cur.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"});
+    show();
+  }
+  function step(d){const s=V.space;if(!s)return;if(s.media.length>1&&((d>0&&V.idx<s.media.length-1)||(d<0&&V.idx>0))){V.idx+=d;show();return;}
+    const i=S.indexOf(s),n=(i+d+S.length)%S.length;setSpace(S[n].id,d<0?S[n].media.length-1:0);}
+  $("pPrev").onclick=()=>{const s=V.space;V.idx=(V.idx-1+s.media.length)%s.media.length;show();};
+  $("pNext").onclick=()=>{const s=V.space;V.idx=(V.idx+1)%s.media.length;show();};
+  $("vFull").onclick=()=>setZoom(false);$("vZoom").onclick=()=>setZoom(true);
+  frame.addEventListener("dblclick",e=>{if(isVid()||e.target.closest("button"))return;setZoom(!V.zoom);});
+  frame.addEventListener("wheel",e=>{if(isVid())return;e.preventDefault();setZoom(e.deltaY<0);},{passive:false});
+  const ptr=new Map();let pinch=0;
+  function clampPan(){const w=frame.clientWidth*.45,h=frame.clientHeight*.45;V.pan.x=Math.max(-w,Math.min(w,V.pan.x));V.pan.y=Math.max(-h,Math.min(h,V.pan.y));}
+  frame.addEventListener("pointerdown",e=>{if(isVid()||e.target.closest("button"))return;frame.setPointerCapture(e.pointerId);ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});if(ptr.size===2){const[a,b]=[...ptr.values()];pinch=Math.hypot(a.x-b.x,a.y-b.y);}frame.classList.add("dragging");});
+  frame.addEventListener("pointermove",e=>{const o=ptr.get(e.pointerId);if(!o)return;ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(ptr.size===2){const[a,b]=[...ptr.values()],r=Math.hypot(a.x-b.x,a.y-b.y)/(pinch||1);if(r>1.15&&!V.zoom)setZoom(true);else if(r<.85&&V.zoom)setZoom(false);return;}
+    if(V.zoom){V.pan.x+=e.clientX-o.x;V.pan.y+=e.clientY-o.y;clampPan();apply();}});
+  const up=e=>{ptr.delete(e.pointerId);if(!ptr.size)frame.classList.remove("dragging");};
+  frame.addEventListener("pointerup",up);frame.addEventListener("pointercancel",up);
+  frame.addEventListener("keydown",e=>{if(isVid())return;const k=e.key;if(k==="+"||k==="="){setZoom(true);e.preventDefault();}if(k==="-"){setZoom(false);e.preventDefault();}
+    if(V.zoom&&k.startsWith("Arrow")){e.preventDefault();e.stopPropagation();const m={ArrowLeft:[40,0],ArrowRight:[-40,0],ArrowUp:[0,40],ArrowDown:[0,-40]}[k];V.pan.x+=m[0];V.pan.y+=m[1];clampPan();apply();}});
+  let active=false;
+  window.Viewer={setSpace,step,stopVideo,get zoom(){return V.zoom},get space(){return V.space},active:()=>active,
+    opened(){active=true;const m=V.space.media[V.idx];if(m.v&&m.auto){const p=vid.play();p&&p.catch(()=>{});}},closed(){active=false;stopVideo();}};
+})();
+</script>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const $=id=>document.getElementById(id);
+const stage=$("stage"), hud=$("hud"), fade=$("fade");
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+let renderer;
+try{ renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); }
+catch(e){ $("loading").remove(); stage.insertAdjacentHTML("beforeend",'<div class="fallback"><strong>当前浏览器无法显示 3D 模型</strong><span>请换用支持 WebGL 的浏览器。实景照片和视频仍可正常浏览。</span></div>');
+  document.addEventListener("click",e=>{const b=e.target.closest("[data-enter],[data-go]");if(!b)return;const id=b.dataset.enter||b.dataset.go;window.Viewer.setSpace(id);document.body.classList.add("is-immersive");hud.classList.add("on","inside");$("journey").hidden=true;$("viewer").classList.add("on");window.Viewer.opened();});
+  $("leave").onclick=()=>{hud.classList.remove("on","inside");document.body.classList.remove("is-immersive");window.Viewer.closed();};
+}
+if(renderer) init();
+
+function init(){
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
+stage.prepend(renderer.domElement);
+renderer.domElement.setAttribute("aria-label","亚龙别墅三维示意模型，可拖动旋转、滚轮缩放");
+renderer.domElement.setAttribute("role","img");
+
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(40,1,.1,500);
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true; controls.dampingFactor=.07; controls.minDistance=10; controls.maxDistance=120; controls.maxPolarAngle=1.42; controls.autoRotate=!reduce; controls.autoRotateSpeed=.4; controls.enablePan=false;
+
+const VIEWS=[
+  {p:[46,40,52],t:[0,0,0]},
+  {p:[46,4.5,-8.4],t:[27,1.8,-8.4]},
+  {p:[24,9,8],t:[8,2,-5]},
+  {p:[2,92,6],t:[1,0,0]}
+];
+camera.position.set(...VIEWS[0].p); controls.target.set(...VIEWS[0].t);
+
+// lights
+const hemi=new THREE.HemisphereLight(0xe6f2ff,0x3a4a46,1.15); scene.add(hemi);
+const sun=new THREE.DirectionalLight(0xfff0d8,2.4); sun.position.set(26,40,22); sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048); Object.assign(sun.shadow.camera,{left:-42,right:42,top:36,bottom:-36,near:1,far:120}); sun.shadow.bias=-.0004; scene.add(sun);
+
+const std=(c,o={})=>new THREE.MeshStandardMaterial({color:c,roughness:.82,...o});
+const M={
+  plate:std(0x1f3437),edge:std(0x16272a),road:std(0x3b4446,{roughness:.95}),walk:std(0xc9c6bd),pave:std(0xb7b3a8),grass:std(0x5f8f55),
+  wall:std(0xece7dc),cream:std(0xddd3bf),trim:std(0x55606a),dark:std(0x2a3134),
+  glass:std(0x5e8296,{roughness:.15,metalness:.35,emissive:0xffd89a,emissiveIntensity:0}),
+  white:std(0xf3f4f6),line:std(0xf2f2ee),red:std(0xd8332b),teal:std(0x1f9fb0),gold:std(0xe9bf5a),
+  trunk:std(0x7a5e44),leaf:std(0x2f7f45,{side:THREE.DoubleSide}),canopy:std(0x3a7d3e,{flatShading:true}),canopy2:std(0x2f6c35,{flatShading:true}),
+  water:std(0x5fb3c9,{roughness:.08,metalness:.2,emissive:0x1b6b80,emissiveIntensity:.15}),stone:std(0xa49c8c),
+  bulb:std(0xfff2c9,{emissive:0xffd27a,emissiveIntensity:0})
+};
+const add=(geo,mat,x,y,z,o={})=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);if(o.ry)m.rotation.y=o.ry;m.castShadow=o.cast!==false;m.receiveShadow=true;(o.parent||scene).add(m);return m;};
+const box=(w,h,d,mat,x,y,z,o)=>add(new THREE.BoxGeometry(w,h,d),mat,x,y+h/2,z,o);
+function canvasTex(w,h,draw){const c=document.createElement("canvas");c.width=w;c.height=h;const g=c.getContext("2d");draw(g,w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;t.userData.redraw=()=>{g.clearRect(0,0,w,h);draw(g,w,h);t.needsUpdate=true;};return t;}
+const texts=[];
+const textTex=(w,h,draw)=>{const t=canvasTex(w,h,draw);texts.push(t);return t;};
+
+// ---------- ground ----------
+const X0=-31,X1=37,Z0=-19.5,Z1=20.5;
+box(X1-X0+1,.8,Z1-Z0+1,M.edge,(X0+X1)/2,-.9,(Z0+Z1)/2);
+box(X1-X0,.1,Z1-Z0,M.plate,(X0+X1)/2,-.1,(Z0+Z1)/2,{cast:false});
+// courtyard paving inside walls
+box(57,.06,36,M.pave,-.5,0,.65,{cast:false});
+// outside road (宜兴路) on the east, sidewalk by the gate
+box(6,.06,Z1-Z0,M.road,33.5,0,(Z0+Z1)/2,{cast:false});
+for(let z=Z0+1;z<Z1;z+=3) box(.14,.02,1.6,M.line,33.5,.06,z,{cast:false});
+box(1.8,.12,Z1-Z0,M.walk,29.6,0,(Z0+Z1)/2,{cast:false});
+
+// boundary wall + gate (门柱 at the east side, as on the site plan)
+const GX=28.2, GZa=-12.4, GZb=-4.6;
+const wallH=1.5;
+box(.35,wallH,GZa-(-17.6),M.cream,GX,0,(GZa+(-17.6))/2);
+box(.35,wallH,18.9-GZb,M.cream,GX,0,(18.9+GZb)/2);
+box(57.6,wallH,.35,M.cream,-.6,0,-17.6); box(57.6,wallH,.35,M.cream,-.6,0,18.9); box(.35,wallH,36.5,M.cream,-29.2,0,.65);
+[GZa,GZb].forEach(z=>{box(1,2.7,1,M.cream,GX,0,z);box(1.15,.18,1.15,M.trim,GX,2.7,z);});
+// "亚龙别墅" plaque on the north pillar
+const plaqueTex=textTex(128,320,(g,w,h)=>{g.fillStyle="#1d1b18";g.fillRect(0,0,w,h);g.strokeStyle="#6b5a32";g.lineWidth=6;g.strokeRect(6,6,w-12,h-12);g.fillStyle="#e9bf5a";g.font="bold 62px 'ZCOOL XiaoWei','Noto Sans SC',serif";g.textAlign="center";g.textBaseline="middle";["亚","龙","别","墅"].forEach((c,i)=>g.fillText(c,w/2,52+i*72));});
+add(new THREE.PlaneGeometry(.46,1.15),std(0xffffff,{map:plaqueTex}),GX+.52,1.45,GZa,{ry:Math.PI/2,cast:false});
+// red incubator banner on the wall north of the gate
+const gateBanner=textTex(640,300,(g,w,h)=>{g.fillStyle="#d8332b";g.fillRect(0,0,w,h);g.fillStyle="#fff";g.textAlign="center";g.font="bold 50px 'Noto Sans SC',sans-serif";g.fillText("创之星惠企共创孵化基地",w/2,74);g.font="500 30px 'Noto Sans SC',sans-serif";g.fillText("开公司免费 · 吃饭免费 · 办公免费 · 住宿免费",w/2,140);g.fillStyle="rgba(255,255,255,.9)";g.fillRect(40,170,w-80,3);g.font="bold 40px 'IBM Plex Mono',monospace";g.fillText("创业热线 13337501127",w/2,240);});
+const gateBannerMat=std(0xffffff,{map:gateBanner,emissive:0xffffff,emissiveMap:gateBanner,emissiveIntensity:.12});
+add(new THREE.PlaneGeometry(3.6,1.7),gateBannerMat,GX+.19,1.0,-15.1,{ry:Math.PI/2,cast:false});
+const lampLights=[];
+function lamp(x,z,h=2.6){box(.1,h,.1,M.dark,x,0,z);add(new THREE.SphereGeometry(.16,10,8),M.bulb,x,h+.1,z);const l=new THREE.PointLight(0xffc977,0,10,1.6);l.position.set(x,h,z);scene.add(l);lampLights.push(l);}
+lamp(GX+.9,GZa-1.1);lamp(GX+.9,GZb+1.1);
+
+// ---------- villas ----------
+const SC=.82, FLOOR=1.3, FLOORS=3, H=FLOOR*FLOORS;
+const toW=(px,py)=>[(px-680)/20,(py-440)/20];
+function facadeTex(lit,seed){return canvasTex(256,384,(g,w,h)=>{let r=seed;const rnd=()=>((r=(r*9301+49297)%233280)/233280);
+  g.fillStyle=lit?"#000":"#ece8de";g.fillRect(0,0,w,h);
+  for(let f=0;f<3;f++)for(let i=0;i<4;i++){const x=i*64+14,y=f*128+28,ww=36,hh=f===2?62:70;
+    if(lit){if(rnd()<.5){g.fillStyle=rnd()<.75?"#ffcf7a":"#dfe8ff";g.fillRect(x,y,ww,hh);}}
+    else{g.fillStyle="#3f4f5a";g.fillRect(x-3,y-3,ww+6,hh+6);g.fillStyle="#6f8ea3";g.fillRect(x,y,ww,hh);g.fillStyle="#3f4f5a";g.fillRect(x+ww/2-1,y,2,hh);g.fillStyle="#d6cfbf";g.fillRect(x-6,y+hh+3,ww+12,5);}}
+  if(!lit){g.fillStyle="#d9d2c2";for(let f=1;f<3;f++)g.fillRect(0,f*128-3,w,6);}
+});}
+const facDay=facadeTex(false,1); facDay.wrapS=THREE.RepeatWrapping;
+const facLit=facadeTex(true,7); facLit.wrapS=THREE.RepeatWrapping;
+const mkFac=()=>std(0xffffff,{map:facDay,emissive:0xffffff,emissiveMap:facLit,emissiveIntensity:0,roughness:.75});
+const facFn=mkFac(), facOther=mkFac();
+const roofOther=std(0x7e878c), roofFn=std(0xd8332b,{emissive:0xd8332b,emissiveIntensity:.18});
+const trimOther=std(0x5a646c), trimFn=std(0x8e1f19);
+const winMats=[facFn,facOther];
+const dimmable=[facOther,roofOther,trimOther];
+function villaGeo(w,d){const geo=new THREE.BoxGeometry(w,H,d);const uv=geo.attributes.uv;
+  // faces: +x,-x,+y,-y,+z,-z (4 verts each); stretch u so one texture = 4 bays of 1.7 units
+  for(let f=0;f<6;f++){if(f===2||f===3)continue;const span=(f<2?d:w)/(1.7*4);for(let v=0;v<4;v++){const i=f*4+v;uv.setX(i,uv.getX(i)*span);}}
+  uv.needsUpdate=true;return geo;}
+const HOT=[],TAGS=[],FN={};
+const signs=[];
+window.BLD.forEach(b=>{
+  const [cx,cz]=toW((b.x1+b.x2)/2,(b.y1+b.y2)/2);
+  const w=(b.x2-b.x1)/20*SC, d=(b.y2-b.y1)/20*SC, fn=!!b.fn;
+  const fac=fn?facFn:facOther, roof=fn?roofFn:roofOther, trim=fn?trimFn:trimOther;
+  const mesh=new THREE.Mesh(villaGeo(w,d),[fac,fac,roof,roof,fac,fac]);mesh.position.set(cx,H/2,cz);mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
+  // tiled parapet edge + small roof room
+  box(w+.24,.22,d+.24,trim,cx,H,cz);
+  box(Math.min(w*.32,2.6),.8,Math.min(d*.4,2),fn?std(0xece7dc):M.cream,cx-w*.18,H+.22,cz-d*.1);
+  // door
+  const [nx,nz]=b.dir, he=nx?w/2:d/2, fw=nx?d:w, ry=Math.atan2(nx,nz);
+  const door=new THREE.Vector3(cx+nx*he,0,cz+nz*he);
+  add(new THREE.PlaneGeometry(1,1.05),M.dark,door.x+nx*.02,.525,door.z+nz*.02,{ry,cast:false});
+  if(fn){
+    // teal shopfront sign over the ground floor, like the real door boards
+    const name=b.sub.split("（")[0].split(" · ").pop();
+    const t=textTex(512,96,(g,W,Hh)=>{g.fillStyle="#1f9fb0";g.fillRect(0,0,W,Hh);g.fillStyle="#d8332b";g.beginPath();g.arc(48,48,30,0,7);g.fill();g.fillStyle="#fff";g.font="bold 28px 'Noto Sans SC',sans-serif";g.textAlign="center";g.textBaseline="middle";g.fillText(b.id,48,50);g.textAlign="left";g.font="bold 46px 'Noto Sans SC',sans-serif";g.fillText(name,96,50);});
+    const sm=std(0xffffff,{map:t,emissive:0xffffff,emissiveMap:t,emissiveIntensity:.15});signs.push(sm);
+    const sw=Math.min(fw*.85,6.2);
+    add(new THREE.BoxGeometry(sw,sw*96/512,.06),sm,door.x+nx*.06,1.18+sw*96/1024,door.z+nz*.06,{ry,cast:false});
+    // red roof outline
+    const eg=new THREE.EdgesGeometry(new THREE.BoxGeometry(w+.3,.01,d+.3));const ln=new THREE.LineSegments(eg,new THREE.LineBasicMaterial({color:0xff5a4e}));ln.position.set(cx,H+.24,cz);scene.add(ln);
+    FN[b.fn]={door,n:new THREE.Vector3(nx,0,nz),dist:b.dist||4,fw};
+    HOT.push({t:`${b.id} 栋 · ${b.sub.replace("（","·").replace("）","")}`,p:[cx,H+1.4,cz],go:b.fn});
+  }else{
+    TAGS.push({t:b.id+(b.sub?" "+b.sub:""),p:[cx,H+.9,cz]});
+  }
+});
+HOT.push({t:"大门 · 亚龙别墅",p:[GX+.4,3.6,(GZa+GZb)/2],go:"gate",cls:"gate"});
+
+// big banyan (大树) and pool (水池)
+const [tx,tz]=toW(935,322);
+for(let k=0;k<4;k++){const c=add(new THREE.CylinderGeometry(.22,.32,4.4,8),M.trunk,tx+(k%2-.5)*.5,2.2,tz+(k>1?.35:-.35));c.rotation.z=(k%2-.5)*.18;}
+[[0,5.6,0,2.8],[1.8,5.1,1,2.1],[-1.9,5.2,.6,2.2],[.6,5.4,-1.8,2.2],[-.8,6.6,-.4,2],[1.2,6.4,.8,1.7]].forEach(([dx,y,dz,r],i)=>{const m=add(new THREE.IcosahedronGeometry(r,1),i%2?M.canopy2:M.canopy,tx+dx,y,tz+dz);m.scale.y=.72;});
+const [p1x,p1z]=toW(724,322),[p2x,p2z]=toW(878,420);
+box(p2x-p1x,.38,p2z-p1z,M.stone,(p1x+p2x)/2,0,(p1z+p2z)/2);
+box(p2x-p1x-.5,.39,p2z-p1z-.5,M.water,(p1x+p2x)/2,0,(p1z+p2z)/2,{cast:false});
+// B6 garden with the roadshow stage (路演舞台)
+const b6=window.BLD.find(b=>b.id==="B6");const [bx6,bz6]=toW((b6.x1+b6.x2)/2,b6.y2);
+box(3.2,.25,1.6,M.cream,bx6+4.2,0,bz6+1.6);box(3.2,.08,1.6,std(0x5b7d4f),bx6+4.2,.25,bz6+1.6,{cast:false});
+
+// palms & shrubs
+function palm(x,z,s=1){
+  const g=new THREE.Group();g.position.set(x,.05,z);g.scale.setScalar(s);scene.add(g);
+  let y=0,px=0;for(let i=0;i<6;i++){const seg=add(new THREE.CylinderGeometry(.09-i*.008,.11-i*.008,.62,7),M.trunk,px,y+.31,0,{parent:g});y+=.6;px+=.04*i;seg.rotation.z=-.05*i;}
+  for(let k=0;k<7;k++){const f=new THREE.Mesh(new THREE.ConeGeometry(.22,1.7,4,1,true),M.leaf);f.castShadow=true;f.position.set(px,y,0);f.rotation.set(0,k/7*Math.PI*2,1.95);f.translateY(.75);f.scale.set(1,1,.25);g.add(f);}
+}
+[[25,-15.5],[25,-1.5],[-27.5,-8],[-27.5,8.4],[3,8.3],[15,15.5],[-9.5,16.5],[9.5,-15.8],[-7.2,8],[bx6+6.4,bz6+1.2]].forEach(([x,z],i)=>palm(x,z,1+(i%3)*.12));
+[[11,-1.5],[-1,-7.4],[-27.8,-16],[26.8,17.4],[-12.8,8],[15.2,10.6]].forEach(([x,z])=>{const m=add(new THREE.IcosahedronGeometry(.8,0),M.canopy,x,.6,z);m.scale.set(1.3,.75,1);});
+
+// parked cars (as in the drone footage)
+function vehicle(len,body){const g=new THREE.Group();scene.add(g);box(len,.55,1.15,body,0,.22,0,{parent:g});box(len*.55,.42,1.05,M.glass,-.1,.77,0,{parent:g});[[-1,1],[1,1],[-1,-1],[1,-1]].forEach(([a,b])=>add(new THREE.CylinderGeometry(.22,.22,.18,12),M.dark,a*(len/2-.45),.22,b*.55,{parent:g}).rotation.x=Math.PI/2);return g;}
+[[25,-6.4,0,0xc0392b],[6,-7.8,0,0xf2f2f2],[-9,-7.6,0,0x2e3b44],[13.4,5,Math.PI/2,0xf2f2f2],[24,13.5,Math.PI/2,0x6b7880]].forEach(([x,z,r,c])=>{const v=vehicle(2.2,std(c));v.position.set(x,.05,z);v.rotation.y=r;});
+const mover=vehicle(2.2,std(0x1f9fb0));mover.rotation.y=Math.PI/2;mover.position.set(32,.05,Z0);let mz=Z0;
+
+// grid under plate
+const grid=new THREE.GridHelper(180,90,0x264046,0x172a2e);grid.position.y=-1.25;grid.material.transparent=true;grid.material.opacity=.5;scene.add(grid);
+
+// ---------- labels ----------
+const ui=$("stageUi");
+HOT.forEach(h=>{const b=document.createElement("button");b.type="button";b.className="hotspot"+(h.cls?" "+h.cls:"");b.textContent=h.t;b.onclick=()=>enter(h.go);ui.appendChild(b);h.el=b;});
+TAGS.forEach(h=>{const s=document.createElement("span");s.className="tag";s.textContent=h.t;ui.appendChild(s);h.el=s;});
+const v3=new THREE.Vector3();
+function placeLabels(){const w=renderer.domElement.clientWidth,h=renderer.domElement.clientHeight,hide=mode!=="idle";
+  const put=(o,extra)=>{v3.set(...o.p).project(camera);const off=hide||extra||v3.z>1||Math.abs(v3.x)>1.05||Math.abs(v3.y)>1.05;o.el.dataset.off=off?"1":"0";if(!off){o.el.style.left=((v3.x+1)/2*w)+"px";o.el.style.top=((1-v3.y)/2*h)+"px";}};
+  HOT.forEach(o=>put(o,false));TAGS.forEach(o=>put(o,focusOnly||camera.position.distanceTo(controls.target)>68));}
+
+// ---------- toggles ----------
+let night=false,focusOnly=false;
+function setNight(n){night=n;stage.classList.toggle("night",n);$("tNight").setAttribute("aria-pressed",n);
+  hemi.intensity=n?.32:1.15; hemi.color.set(n?0x6d8ab8:0xe6f2ff); sun.intensity=n?.3:2.4; sun.color.set(n?0x9fb4ff:0xfff0d8);
+  winMats.forEach(m=>m.emissiveIntensity=n?1.05:0); M.bulb.emissiveIntensity=n?2.2:0; lampLights.forEach(l=>l.intensity=n?7:0);
+  signs.forEach(m=>m.emissiveIntensity=n?.9:.15); gateBannerMat.emissiveIntensity=n?.7:.12; roofFn.emissiveIntensity=n?.55:.18;}
+function setFocus(f){focusOnly=f;$("tFocus").setAttribute("aria-pressed",f);dimmable.forEach(m=>{m.transparent=f;m.opacity=f?.18:1;m.depthWrite=!f;m.needsUpdate=true;});}
+$("tNight").onclick=()=>setNight(!night);
+$("tFocus").onclick=()=>setFocus(!focusOnly);
+$("tTags").onclick=()=>{const on=stage.classList.toggle("no-tags");$("tTags").setAttribute("aria-pressed",!on);};
+$("tRotate").onclick=()=>{controls.autoRotate=!controls.autoRotate;$("tRotate").setAttribute("aria-pressed",controls.autoRotate);};
+const dolly=f=>{const off=camera.position.clone().sub(controls.target);const len=THREE.MathUtils.clamp(off.length()*f,controls.minDistance,controls.maxDistance);fly(controls.target.clone().add(off.setLength(len)),controls.target.clone(),reduce?0:450);};
+$("tIn").onclick=()=>dolly(.75);$("tOut").onclick=()=>dolly(1.3);$("tReset").onclick=()=>setView(0);
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>setView(+b.dataset.view));
+function setView(i){document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.view===i));const v=VIEWS[i];fly(new THREE.Vector3(...v.p),new THREE.Vector3(...v.t),reduce?0:1400);}
+document.fonts&&document.fonts.ready.then(()=>texts.forEach(t=>t.userData.redraw()));
+
+// ---------- camera motion ----------
+let tw=null;
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const ss=(a,b,x)=>{const t=Math.min(1,Math.max(0,(x-a)/(b-a)));return t*t*(3-2*t);};
+function fly(p,t,dur){if(tw)tw.done();return new Promise(res=>{if(!dur){camera.position.copy(p);controls.target.copy(t);res();return;}
+  tw={p0:camera.position.clone(),t0:controls.target.clone(),p1:p,t1:t,s:performance.now(),dur,done(){camera.position.copy(p);controls.target.copy(t);tw=null;res();}};});}
+// drone-style path: approach the gate, pass through, rise over the roofs, settle at the building door
+function route(id){
+  const G1=new THREE.Vector3(46,5,-8.5),G2=new THREE.Vector3(33,2.1,-8.5),G3=new THREE.Vector3(23,2.4,-8.4);
+  if(id==="gate") return {pts:[camera.position.clone(),new THREE.Vector3(52,9,-8.5),new THREE.Vector3(36,1.9,-8.5)],look:new THREE.Vector3(GX,1.7,-8.5)};
+  const f=FN[id];
+  const A=f.door.clone().addScaledVector(f.n,f.dist);A.y=2.0;
+  const look=f.door.clone();look.y=1.45;
+  const pts=[camera.position.clone(),G1,G2,G3];
+  if(G3.distanceTo(A)>9){const M2=G3.clone().lerp(A,.55);M2.y=10;pts.push(M2);const pre=A.clone().addScaledVector(f.n,2.5);pre.y=4;pts.push(pre);}
+  pts.push(A);
+  return {pts,look};
+}
+function flyPath(r,dur,onU){if(tw)tw.done();return new Promise(res=>{
+  const curve=new THREE.CatmullRomCurve3(r.pts,false,"centripetal");
+  if(!dur){camera.position.copy(r.pts[r.pts.length-1]);controls.target.copy(r.look);res();return;}
+  tw={curve,look0:controls.target.clone(),look:r.look,s:performance.now(),dur,onU,done(){camera.position.copy(r.pts[r.pts.length-1]);controls.target.copy(r.look);tw=null;res();}};});}
+const ahead=new THREE.Vector3(),tmp=new THREE.Vector3(),gateLook=new THREE.Vector3(GX,1.8,-8.5);
+
+// ---------- immersive journey ----------
+let mode="idle", token=0;
+const setStep=n=>document.querySelectorAll("#journey li").forEach(li=>{const s=+li.dataset.s;li.className=s===n?"now":s<n?"done":"";});
+async function enter(id){
+  const my=++token; window.Viewer.setSpace(id);
+  if(mode==="inside"){return;}
+  const prev=mode; mode="journey"; document.body.classList.add("is-immersive"); stage.classList.add("immersive"); hud.classList.add("on");
+  $("viewer").classList.remove("on"); $("journey").hidden=false; $("hudKicker").textContent="走进小院"; resize();
+  controls.enabled=false; if(prev==="idle")stage.dataset.rot=controls.autoRotate?"1":""; controls.autoRotate=false;
+  if(focusOnly)setFocus(false);
+  const r=route(id), len=new THREE.CatmullRomCurve3(r.pts).getLength();
+  const dur=reduce?0:THREE.MathUtils.clamp(1800+len*42,3600,7200);
+  setStep(1);
+  await flyPath(r,dur,u=>setStep(u<.3?1:u<.78?2:3)); if(my!==token)return;
+  setStep(3); await wait(reduce?0:350); if(my!==token)return;
+  fade.classList.add("on"); await wait(reduce?0:450); if(my!==token)return;
+  inside();
+}
+function inside(){mode="inside";hud.classList.add("inside");$("journey").hidden=true;$("hudKicker").textContent="STEP INSIDE · 实景空间";
+  $("viewer").classList.add("on");fade.classList.remove("on");$("frame").focus({preventScroll:true});window.Viewer.opened();}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+$("skip").onclick=()=>{const my=++token;if(tw)tw.done();fade.classList.add("on");setTimeout(()=>{if(my===token){setStep(3);inside();}},reduce?0:250);};
+async function leave(){
+  const my=++token; if(tw)tw.done(); window.Viewer.closed(); $("viewer").classList.remove("on"); $("journey").hidden=true; hud.classList.remove("inside"); mode="returning";
+  const v=VIEWS[0]; await fly(new THREE.Vector3(...v.p),new THREE.Vector3(...v.t),reduce?0:1600); if(my!==token)return;
+  mode="idle"; hud.classList.remove("on"); stage.classList.remove("immersive"); document.body.classList.remove("is-immersive");
+  controls.enabled=true; controls.autoRotate=!!stage.dataset.rot; resize();
+  document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.view==="0"));
+}
+$("leave").onclick=leave;
+document.addEventListener("click",e=>{const b=e.target.closest("[data-enter]");if(b){enter(b.dataset.enter);return;}const g=e.target.closest("[data-go]");if(g){window.Viewer.setSpace(g.dataset.go);if(mode==="inside")window.Viewer.opened();else if(mode!=="journey")enter(g.dataset.go);}});
+document.addEventListener("keydown",e=>{if(mode==="idle")return;if(e.key==="Escape"){e.preventDefault();leave();}
+  if(mode==="inside"&&!window.Viewer.zoom&&e.target.tagName!=="VIDEO"){if(e.key==="ArrowRight"){window.Viewer.step(1);window.Viewer.opened();}if(e.key==="ArrowLeft"){window.Viewer.step(-1);window.Viewer.opened();}}});
+
+// ---------- resize + loop ----------
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w<640?52:40;camera.updateProjectionMatrix();}
+new ResizeObserver(resize).observe(stage); resize();
+$("loading").remove();
+let last=performance.now();
+renderer.setAnimationLoop(now=>{
+  const dt=Math.min(.05,(now-last)/1000);last=now;
+  if(tw){const k=Math.max(0,Math.min(1,(now-tw.s)/tw.dur)),e=ease(k);
+    if(tw.curve){const u=e;tw.curve.getPointAt(u,camera.position);tw.curve.getPointAt(Math.min(1,u+.07),ahead);ahead.y-=.35;
+      tmp.copy(tw.look0).lerp(gateLook,ss(0,.18,u)).lerp(ahead,ss(.22,.4,u)).lerp(tw.look,ss(.62,.97,u));controls.target.copy(tmp);tw.onU&&tw.onU(u);}
+    else{camera.position.lerpVectors(tw.p0,tw.p1,e);controls.target.lerpVectors(tw.t0,tw.t1,e);}
+    if(k>=1)tw.done();}
+  else if(mode==="inside"){const a=now*.00005;camera.position.set(Math.sin(a)*48,30,Math.cos(a)*48);controls.target.set(0,2,0);}
+  if(!reduce){mz+=dt*4;if(mz>Z1)mz=Z0;mover.position.z=mz;}
+  if(tw&&tw.curve) camera.lookAt(controls.target); else controls.update();
+  renderer.render(scene,camera); placeLabels();
+});
+}
+</script>
+<script src="../shared/basebar.js" defer></script>

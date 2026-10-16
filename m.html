@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>惠企孵化基地 · 手机版</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="惠企五大孵化基地手机竖屏版：全屏海南岛 3D 地图，左右滑动卡片切换基地，一键进入各基地的 3D 园区。">
+<meta name="theme-color" content="#061521">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&display=swap">
+<style>
+/* Layout: one full-screen portrait app — 3D island fills the screen, title floats on top, a swipeable card rail docks at the bottom (thumb zone).
+   Motif: the same nautical-chart island as the desktop overview; cards carry each base's own accent color. */
+:root{
+  --sea:#061521; --panel:rgba(10,26,39,.9); --line:rgba(170,205,230,.14); --line-2:rgba(170,205,230,.28);
+  --fg:#edf3f7; --muted:#9bb0c0; --dim:#6a8294; --sand:#e9dcbc;
+  --display:"Noto Serif SC","Songti SC","STSong",serif;
+  --body:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gl:max(16px,env(safe-area-inset-left,0px)); --gr:max(16px,env(safe-area-inset-right,0px));
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
+body{background:var(--sea);color:var(--fg);font:14px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--sand);outline-offset:2px;border-radius:8px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+.app{position:fixed;inset:0}
+#map{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+
+/* top bar */
+.bar{position:absolute;left:0;right:0;top:0;z-index:5;padding:calc(10px + env(safe-area-inset-top,0px)) var(--gr) 26px var(--gl);
+  background:linear-gradient(180deg,rgba(6,21,33,.96) 0%,rgba(6,21,33,.82) 62%,rgba(6,21,33,0) 100%);pointer-events:none}
+.bar .row{display:flex;align-items:center;gap:10px;pointer-events:auto}
+.mark{width:28px;height:28px;flex:none;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center}
+.mark i{width:5px;height:5px;border-radius:50%;background:var(--sand);box-shadow:0 0 0 4px rgba(233,220,188,.12)}
+.brand{font:900 15px/1.2 var(--display);letter-spacing:.08em}
+.pc{margin-left:auto;font-size:12px;color:var(--muted);text-decoration:none;padding:6px 10px;border:1px solid var(--line);border-radius:999px}
+.bar h1{margin:12px 0 0;font:900 25px/1.2 var(--display);letter-spacing:.03em;text-wrap:balance}
+.bar h1 em{font-style:normal;color:var(--sand)}
+.bar .eyebrow{margin-top:5px;font:400 10px/1.3 var(--mono);color:var(--dim);letter-spacing:.06em}
+
+/* floating controls */
+.whole{padding:6px 11px;border-radius:999px;border:1px solid var(--line-2);background:rgba(6,21,33,.8);font-size:12px;display:flex;align-items:center;gap:6px}
+.whole svg{width:14px;height:14px}
+.whole[aria-pressed=true]{border-color:var(--sand);color:var(--sand)}
+
+/* map labels */
+.pin{position:absolute;left:0;top:0;pointer-events:auto;border:0;background:none;padding:10px;will-change:transform}
+.pin span{display:block;padding:5px 10px;border-radius:999px;background:rgba(6,21,33,.86);border:1px solid var(--line-2);font:500 12px/1.2 var(--body);white-space:nowrap}
+.pin span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--c);margin-right:7px;vertical-align:1px}
+.pin[aria-pressed=true] span{border-color:var(--c);background:rgba(6,21,33,.96)}
+.pin.compact span{font-size:0;padding:5px}.pin.compact span::before{margin:0;width:9px;height:9px}
+.region{position:absolute;left:0;top:0;font:500 9.5px/1 var(--body);letter-spacing:.2em;color:rgba(240,236,220,.55);text-shadow:0 1px 5px rgba(0,0,0,.7);white-space:nowrap}
+.peak{position:absolute;left:0;top:0;font:500 9.5px/1 var(--mono);color:rgba(240,236,220,.75);text-shadow:0 1px 5px rgba(0,0,0,.7);white-space:nowrap}
+.sea{position:absolute;left:0;top:0;font:600 13px/1 var(--display);letter-spacing:.3em;color:rgba(150,200,225,.35);white-space:nowrap}
+.city{position:absolute;left:0;top:0;font:600 11.5px/1 var(--body);letter-spacing:.2em;color:var(--sand);text-shadow:0 1px 8px rgba(0,0,0,.8);white-space:nowrap}
+.hk{position:absolute;left:0;top:0;margin-top:4px;padding:5px 10px;border-radius:999px;background:rgba(6,21,33,.86);border:1px solid rgba(241,227,189,.5);font:600 11px/1 var(--body);color:var(--sand);white-space:nowrap}
+.grat{position:absolute;left:0;top:0;font:400 9px/1 var(--mono);color:var(--dim);white-space:nowrap}
+
+/* bottom sheet */
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:5;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(0deg,rgba(6,21,33,.97) 0%,rgba(6,21,33,.9) 70%,rgba(6,21,33,0) 100%);padding-top:22px}
+.meta{display:flex;align-items:center;gap:10px;padding:0 var(--gr) 10px var(--gl);font-size:11.5px;color:var(--dim)}
+.dots{display:flex;gap:6px;margin-left:auto}
+.dots button{width:8px;height:8px;padding:0;border:0;border-radius:99px;background:rgba(255,255,255,.22);transition:width .25s,background .25s}
+.dots button[aria-current=true]{width:22px;background:var(--cc)}
+.rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:2px max(28px,env(safe-area-inset-right,0px)) 4px max(28px,env(safe-area-inset-left,0px));scroll-padding-inline:28px}
+.rail::-webkit-scrollbar{display:none}
+.bc{flex:0 0 min(calc(100vw - 56px),420px);scroll-snap-align:center;display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;padding:10px;border-radius:16px;
+  background:var(--panel);border:1px solid var(--line);transition:border-color .25s,transform .25s;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.bc.on{border-color:color-mix(in srgb,var(--cc) 70%,transparent)}
+.bc img{width:96px;height:100%;min-height:118px;object-fit:cover;border-radius:10px}
+.bt{min-width:0;display:flex;flex-direction:column;gap:3px}
+.tagl{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--dim)}
+.tagl b{font-weight:500;color:var(--cc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bc h2{margin:0;font:900 17px/1.3 var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.addr{margin:0;font-size:12px;line-height:1.5;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.go{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;border-radius:10px;background:var(--cc);color:#0a1218;font-weight:700;font-size:13.5px;text-decoration:none}
+.go svg{width:15px;height:15px}
+.go:active{filter:brightness(.92)}
+
+/* landscape phones: suggest portrait */
+.rotate{position:fixed;inset:0;z-index:20;display:none;place-items:center;text-align:center;background:var(--sea);padding:24px;color:var(--muted)}
+.rotate b{display:block;font:900 20px/1.4 var(--display);color:var(--fg);margin-bottom:6px}
+@media (orientation:landscape) and (max-height:500px){.rotate{display:grid}}
+@media (prefers-reduced-motion:reduce){.dots button,.bc{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="map" aria-label="海南岛三维地图，标出五个孵化基地的位置"></canvas>
+  <div class="labels" id="labels"></div>
+
+  <header class="bar" id="bar">
+    <div class="row">
+      <span class="mark"><i></i></span>
+      <span class="brand">惠企 · 孵化基地</span>
+      <a class="pc" href="index.html#pc" onclick="try{sessionStorage.setItem('hq-pc','1')}catch(e){}">电脑版</a>
+    </div>
+    <h1>一座岛，<em>五个基地</em></h1>
+    <div class="eyebrow">海口 4 处 · 三亚 1 处 · 18°10′–20°10′ N</div>
+  </header>
+
+
+  <section class="sheet" id="sheet" aria-label="五个孵化基地">
+    <div class="meta"><button class="whole" id="whole" type="button" aria-pressed="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>
+    全岛
+  </button><span>左右滑动切换基地</span><div class="dots" id="dots"></div></div>
+    <div class="rail" id="rail"></div>
+  </section>
+</div>
+
+<div class="rotate"><div><b>请竖屏浏览</b>手机竖着拿，地图和卡片显示效果最佳</div></div>
+
+<script>try { sessionStorage.setItem("hq-hub", "m.html"); } catch (e) {}</script>
+<script src="hub/bases.js"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="hub/map-mobile.js"></script>
+</body>
+</html>

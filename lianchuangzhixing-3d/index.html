@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c1322">
+</head>
+<body>
+<title>联创之星 3D 孵化基地</title>
+<meta name="description" content="联创之星孵化基地，海口海甸岛人民大道25号景业广场二层。3D 浏览基地所在建筑，走进 8 个真实空间。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+QingKe+HuangYou&display=swap">
+<style>
+/* Layout: split hero (copy | live 3D block of 景业广场) → photo-space grid → services → policy → location. Motif: the yellow/green diagonal wall stripes painted inside the base. */
+:root{
+  --ink:#0c1322; --panel:#141d31; --panel-2:#1b2640; --line:rgba(206,219,242,.12); --line-2:rgba(206,219,242,.22);
+  --fg:#eef2f8; --muted:#9aa7bf; --dim:#6d7a94;
+  --sun:#f5c21b; --sun-ink:#1d1603; --leaf:#46b163; --star:#e3372d;
+  --display:"ZCOOL QingKe HuangYou","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --body:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:14px; --wrap:1240px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--fg);font:15px/1.7 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.is-immersive{overflow:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--sun);outline-offset:3px;border-radius:6px}
+h1,h2,h3{text-wrap:balance;margin:0;font-weight:400}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-inline:clamp(16px,4vw,40px)}
+.kicker{display:inline-flex;align-items:center;gap:10px;font:500 12px/1 var(--mono);letter-spacing:.14em;color:var(--sun);text-transform:uppercase}
+.kicker::before{content:"";width:22px;height:8px;background:repeating-linear-gradient(-55deg,var(--sun) 0 4px,var(--leaf) 4px 8px)}
+.stripe{background:repeating-linear-gradient(-55deg,var(--sun) 0 14px,var(--leaf) 14px 28px)}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--ink) 86%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:24px;min-height:68px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo{width:34px;height:34px;border-radius:8px;background:var(--star);display:grid;place-items:center;color:#fff;font:700 15px/1 var(--display)}
+.brand strong{display:block;font:400 22px/1 var(--display);letter-spacing:.06em}
+.brand small{display:block;font:500 10px/1.4 var(--mono);color:var(--muted);letter-spacing:.16em;margin-top:3px}
+.nav{display:flex;gap:4px;margin-left:auto}
+.nav a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--muted);font-size:14px}
+.nav a:hover{color:var(--fg);background:var(--panel)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--line-2);background:transparent;padding:12px 20px;border-radius:10px;font-weight:500;text-decoration:none;transition:background .2s,border-color .2s,transform .2s}
+.btn:hover{border-color:var(--fg)}
+.btn-sun{background:var(--sun);color:var(--sun-ink);border-color:var(--sun)}
+.btn-sun:hover{background:#ffd23d;border-color:#ffd23d;transform:translateY(-1px)}
+.btn svg{width:16px;height:16px}
+
+/* hero */
+.hero .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(20px,3vw,48px);align-items:center;padding-block:clamp(28px,5vw,64px) 40px}
+.hero-copy{min-width:0;display:grid;gap:24px}
+.hero h1{font:400 clamp(40px,5.4vw,72px)/1.08 var(--display);letter-spacing:.02em}
+.hero h1 em{font-style:normal;color:var(--sun)}
+.lead{color:var(--muted);max-width:32em;margin:0;font-size:16px}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);padding-top:20px;gap:12px}
+.stat b{display:block;font:500 clamp(22px,2.4vw,30px)/1.1 var(--mono);font-variant-numeric:tabular-nums}
+.stat b small{font-size:.5em;color:var(--muted);margin-left:2px}
+.stat span{font-size:12.5px;color:var(--muted)}
+
+/* 3D stage */
+.stage{position:relative;height:clamp(420px,64vh,640px);border-radius:20px;overflow:hidden;background:radial-gradient(120% 90% at 60% 30%,#1c2a48 0%,#0f1729 55%,#0a101d 100%);border:1px solid var(--line)}
+.stage.night{background:radial-gradient(120% 90% at 60% 30%,#131c33 0%,#080d19 60%,#05080f 100%)}
+.stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.stage-ui{position:absolute;inset:0;pointer-events:none}
+.stage-ui > *{pointer-events:auto}
+.presets{position:absolute;top:14px;right:14px;display:flex;flex-wrap:wrap;gap:4px;padding:4px;background:rgba(10,16,29,.72);border:1px solid var(--line);border-radius:10px;max-width:calc(100% - 28px)}
+.presets button{border:0;background:transparent;padding:6px 10px;border-radius:7px;font-size:12.5px;color:var(--muted)}
+.presets button[aria-pressed="true"]{background:var(--sun);color:var(--sun-ink)}
+.tools{position:absolute;right:14px;bottom:14px;display:flex;gap:2px;padding:4px;background:rgba(10,16,29,.72);border:1px solid var(--line);border-radius:10px}
+.tools button{width:34px;height:34px;border:0;background:transparent;border-radius:7px;display:grid;place-items:center;color:var(--muted)}
+.tools button:hover,.tools button[aria-pressed="true"]{color:var(--fg);background:var(--panel-2)}
+.tools svg{width:17px;height:17px}
+.stage-note{position:absolute;left:16px;bottom:16px;font:12px/1.5 var(--mono);color:var(--dim);pointer-events:none}
+.stage-note b{display:block;color:var(--muted);font-weight:500}
+.hotspot{position:absolute;left:0;top:0;display:flex;align-items:center;gap:8px;padding:6px 11px 6px 9px;border-radius:999px;border:1px solid var(--line-2);background:rgba(12,19,34,.82);font-size:12.5px;white-space:nowrap;transform:translate(-50%,-130%);transition:opacity .25s}
+.hotspot::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--sun);box-shadow:0 0 0 4px rgba(245,194,27,.22)}
+.hotspot.main{border-color:var(--sun)}
+.hotspot:hover{background:var(--panel-2)}
+.hotspot[data-off="1"]{opacity:0;pointer-events:none}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font:13px var(--mono);pointer-events:none}
+.fallback{position:absolute;inset:0;display:grid;place-content:center;gap:8px;text-align:center;padding:24px;color:var(--muted)}
+
+/* immersive */
+.stage.immersive{position:fixed;inset:0;z-index:60;border-radius:0;border:0;height:auto}
+.stage.immersive .presets,.stage.immersive .tools,.stage.immersive .stage-note{display:none}
+.hud{position:fixed;inset:0;z-index:61;display:none;flex-direction:column;gap:14px;padding:calc(16px + env(safe-area-inset-top,0px)) clamp(16px,3vw,32px) calc(16px + env(safe-area-inset-bottom,0px));pointer-events:none;transition:background .5s}
+.hud.on{display:flex}
+.hud.inside{background:linear-gradient(180deg,rgba(9,14,26,.9),rgba(9,14,26,.72) 40%,rgba(9,14,26,.9));backdrop-filter:blur(6px);pointer-events:auto}
+.hud > *{pointer-events:auto}
+.hud-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hud-top .brand{pointer-events:none}
+.hud-top .spacer{width:120px}
+.ghost{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;border:1px solid var(--line-2);background:rgba(12,19,34,.8);white-space:nowrap}
+.ghost:hover{border-color:var(--fg)}
+.ghost svg{width:16px;height:16px}
+.hud-title{pointer-events:none!important;display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:6px 24px;max-width:1080px;width:100%;margin-inline:auto}
+.hud-title > div{min-width:0}
+.hud-title h2{font:400 clamp(30px,3.6vw,46px)/1.1 var(--display);margin-top:8px;display:flex;align-items:baseline;gap:12px}
+.hud-title h2 span{font:500 14px var(--mono);color:var(--muted)}
+.hud-title p{margin:0;color:var(--muted);max-width:34em}
+.journey{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;justify-items:center;gap:14px;padding:22px 28px;border-radius:16px;background:rgba(12,19,34,.8);border:1px solid var(--line);backdrop-filter:blur(8px)}
+.journey ol{display:flex;gap:26px;margin:0;padding:0;list-style:none}
+.journey li{display:grid;justify-items:center;gap:6px;font-size:13px;color:var(--dim);white-space:nowrap}
+.journey li span{width:28px;height:28px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;font:500 12px var(--mono)}
+.journey li.now{color:var(--fg)}
+.journey li.now span{border-color:var(--sun);color:var(--sun);box-shadow:0 0 0 4px rgba(245,194,27,.18)}
+.journey li.done span{background:var(--leaf);border-color:var(--leaf);color:#06140a}
+.journey button{border:0;background:none;color:var(--muted);font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.fade{position:fixed;inset:0;z-index:62;background:var(--ink);opacity:0;pointer-events:none;transition:opacity .45s}
+.fade.on{opacity:1}
+.viewer{flex:1;min-height:0;width:100%;max-width:1080px;margin-inline:auto;display:none;grid-template-rows:minmax(0,1fr) auto;gap:10px}
+.viewer.on{display:grid;animation:rise .5s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.frame{position:relative;min-height:200px;width:100%;border-radius:14px;overflow:hidden;background:#070b14;border:1px solid var(--line-2);cursor:zoom-in;touch-action:none}
+.frame.zoomed{cursor:grab}
+.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:transform .35s ease,opacity .3s;user-select:none;-webkit-user-drag:none}
+.frame.dragging img{transition:opacity .3s}
+.frame .blur{object-fit:cover;filter:blur(28px) brightness(.45);transform:scale(1.2)}
+.photo-nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:1px solid var(--line-2);background:rgba(12,19,34,.82);display:grid;place-items:center}
+.photo-nav svg{width:18px;height:18px}
+.photo-nav.prev{left:12px}.photo-nav.next{right:12px}
+.viewer-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;font-size:13px;color:var(--muted)}
+.viewer-bar .cap{flex:1 1 240px;min-width:0;color:var(--fg)}
+.seg{display:inline-flex;padding:3px;border-radius:9px;background:rgba(12,19,34,.85);border:1px solid var(--line)}
+.seg button{border:0;background:none;padding:5px 12px;border-radius:7px;font-size:12.5px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--panel-2);color:var(--fg)}
+.count{font:500 12px var(--mono);color:var(--muted)}
+.strip{margin-top:auto;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;max-width:1080px;width:100%;margin-inline:auto}
+.strip::-webkit-scrollbar{display:none}
+.strip button{flex:1 0 118px;border:1px solid var(--line);border-radius:10px;background:rgba(12,19,34,.86);padding:0;overflow:hidden;text-align:left}
+.strip img{width:100%;height:54px;object-fit:cover;opacity:.7}
+.strip span{display:block;padding:6px 9px;font-size:12.5px;white-space:nowrap}
+.strip span i{font:500 11px var(--mono);font-style:normal;color:var(--dim);margin-right:6px}
+.strip button[aria-current="true"]{border-color:var(--sun)}
+.strip button[aria-current="true"] img{opacity:1}
+
+/* sections */
+section.block{padding-block:clamp(56px,8vw,104px);border-top:1px solid var(--line)}
+.head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px 32px;margin-bottom:36px}
+.head > div{min-width:0;display:grid;gap:14px}
+.head h2{font:400 clamp(30px,3.6vw,46px)/1.15 var(--display)}
+.head p{margin:0;color:var(--muted);max-width:36em}
+.spaces{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.card{border:1px solid var(--line);background:var(--panel);border-radius:var(--r);padding:0;overflow:hidden;text-align:left;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--sun);transform:translateY(-2px)}
+.card .ph{position:relative;aspect-ratio:4/3;overflow:hidden}
+.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.card:hover .ph img{transform:scale(1.05)}
+.card .no{position:absolute;left:10px;top:10px;font:500 11px var(--mono);background:rgba(12,19,34,.8);padding:3px 8px;border-radius:6px}
+.card .pc{position:absolute;right:10px;top:10px;font:500 11px var(--mono);background:rgba(12,19,34,.8);padding:3px 8px;border-radius:6px;color:var(--muted)}
+.card .tx{padding:14px 16px 16px;display:grid;gap:4px}
+.card strong{font-size:16px;font-weight:500}
+.card small{color:var(--muted);font-size:12.5px;line-height:1.5}
+.note{margin-top:18px;font-size:12.5px;color:var(--dim)}
+
+.svc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.svc article{border:1px solid var(--line);border-radius:var(--r);padding:24px;display:grid;gap:14px;align-content:start;min-width:0}
+.svc h3{font:400 24px/1.2 var(--display)}
+.svc h3 span{display:block;font:500 11px var(--mono);color:var(--sun);letter-spacing:.14em;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.chips li{padding:5px 11px;border-radius:999px;background:var(--panel-2);font-size:13px}
+.uni{margin-top:14px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center;border-radius:var(--r);padding:20px 24px;background:var(--panel)}
+.uni .stripe{width:10px;align-self:stretch;border-radius:4px}
+.uni p{margin:0;color:var(--muted)}
+.uni b{color:var(--fg);font-weight:500}
+
+.policy{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:14px}
+.policy-main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.fig{border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;display:grid;gap:8px;align-content:start}
+.fig.hi{background:var(--sun);color:var(--sun-ink);border-color:var(--sun)}
+.fig.hi p{color:rgba(29,22,3,.78)}
+.fig b{font:500 clamp(34px,4vw,48px)/1 var(--mono);font-variant-numeric:tabular-nums}
+.fig b small{font-size:.4em;margin-left:4px}
+.fig h3{font-size:16px;font-weight:500}
+.fig p{margin:0;color:var(--muted);font-size:13.5px}
+.plan{border:1px solid var(--line);border-radius:var(--r);background:#f4f5f7;padding:16px;display:grid;gap:8px;align-content:start}
+.plan img{max-height:430px;width:auto;margin:0 auto}
+.plan figcaption{color:#3a4458;font-size:12.5px;text-align:center}
+
+.loc{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(20px,3vw,40px);align-items:start}
+.map{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);margin:0}
+.map figcaption{padding:10px 14px;font-size:12.5px;color:var(--muted);background:var(--panel)}
+.addr{font:400 clamp(22px,2.4vw,28px)/1.35 var(--display);margin:0 0 20px}
+.facts{display:grid;gap:0;margin:0}
+.facts > div{display:grid;grid-template-columns:5.5em minmax(0,1fr);gap:16px;padding:14px 0;border-top:1px solid var(--line)}
+.facts dt{color:var(--dim);font-size:13px}
+.facts dd{margin:0;font-size:14px}
+.bus{display:flex;flex-wrap:wrap;gap:6px}
+.bus span{font:500 12px/1 var(--mono);padding:6px 8px;border-radius:6px;background:var(--leaf);color:#06140a}
+
+footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--dim);font-size:12.5px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 24px}
+
+@media (max-width:1020px){
+  .hero .wrap{grid-template-columns:1fr}
+  .spaces{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .svc,.policy,.loc{grid-template-columns:1fr}
+  .nav{display:none}
+}
+@media (max-width:560px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .policy-main{grid-template-columns:1fr}
+  .journey{padding:18px}.journey ol{gap:14px}
+  .hud-top .brand,.hud-top .spacer{display:none}
+  .strip button{flex:0 0 104px}.strip img{height:44px}
+  .photo-nav{width:36px;height:36px}
+  .presets button{padding:5px 8px;font-size:12px}
+  .stage-note{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="logo">联</span><span><strong>联创之星</strong><small>LIANCHUANG STAR INCUBATOR</small></span></a>
+    <nav class="nav" aria-label="页面导航">
+      <a href="#top">3D 基地</a><a href="#spaces">实景空间</a><a href="#services">孵化服务</a><a href="#policy">入驻政策</a><a href="#location">交通区位</a>
+    </nav>
+    <button class="btn btn-sun" data-enter="street" type="button">走进基地<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="kicker">海口 · 海甸岛 · 人民大道 25 号</span>
+        <h1>海大东门旁，<br><em>拎包入驻</em>，<br>即刻办公。</h1>
+        <p class="lead">联创之星孵化基地在景业广场二层，距海南大学约 2 公里。883 平方米的通透场地里，有 9 间独立办公室和 130 个开放工位，面向大学生与初创企业。</p>
+        <div class="actions">
+          <button class="btn btn-sun" data-enter="street" type="button">从街边走进基地<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+          <a class="btn" href="#spaces">浏览 8 个实景空间</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>883<small>㎡</small></b><span>场地总面积</span></div>
+          <div class="stat"><b>9<small>间</small></b><span>独立办公室</span></div>
+          <div class="stat"><b>130<small>个</small></b><span>开放工位</span></div>
+          <div class="stat"><b>6<small>个月</small></b><span>房租免租期</span></div>
+        </div>
+      </div>
+
+      <div class="stage" id="stage">
+        <div class="loading" id="loading">正在搭建景业广场…</div>
+        <div class="stage-ui" id="stageUi">
+          <div class="presets" role="group" aria-label="观察视角">
+            <button type="button" data-view="0" aria-pressed="true">全景</button>
+            <button type="button" data-view="1">沿街立面</button>
+            <button type="button" data-view="2">二层基地</button>
+            <button type="button" data-view="3">公交站台</button>
+          </div>
+          <div class="stage-note"><b>景业广场 · 3D 示意建模</b>拖动旋转 · 滚轮或双指缩放</div>
+          <div class="tools" role="group" aria-label="模型控制">
+            <button type="button" id="tRotate" aria-pressed="true" title="自动旋转" aria-label="自动旋转"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
+            <button type="button" id="tNight" aria-pressed="false" title="夜景" aria-label="切换夜景"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+            <button type="button" id="tIn" title="放大" aria-label="放大"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            <button type="button" id="tOut" title="缩小" aria-label="缩小"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg></button>
+            <button type="button" id="tReset" title="重置视角" aria-label="重置视角"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="spaces">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="kicker">实景空间 · 按参观路线排列</span><h2>从街边一路走到工位</h2></div>
+        <p>点开任意空间，镜头会从景业广场外靠近、穿过入口，再进入这个空间的实景照片。</p>
+      </div>
+      <div class="spaces" id="spaceGrid"></div>
+      <p class="note">全部照片为联创之星孵化基地实景拍摄。</p>
+    </div>
+  </section>
+
+  <section class="block" id="services">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="kicker">孵化服务</span><h2>场地、代办与辅导，都在二层</h2></div>
+        <p>从一个注册工位开始，到工商、财税、法律代办，再到融资对接，创业企业需要的服务在基地内就能办。</p>
+      </div>
+      <div class="svc">
+        <article><h3><span>BASIC</span>基础服务</h3><ul class="chips"><li>注册工位</li><li>公共洽谈间</li><li>会议室</li><li>会客厅</li><li>打印机</li><li>复印机</li><li>传真机</li><li>扫描机</li></ul></article>
+        <article><h3><span>VALUE-ADDED</span>增值服务</h3><ul class="chips"><li>工商注册</li><li>变更代理</li><li>法律咨询</li><li>人事代理</li><li>税务规划</li><li>会计代理</li></ul></article>
+        <article><h3><span>INCUBATION</span>立体孵化</h3><ul class="chips"><li>创业咨询与辅导</li><li>管理咨询与培训</li><li>政策咨询与辅导</li><li>银行贷款担保</li><li>风险投资对接</li></ul></article>
+      </div>
+      <div class="uni"><span class="stripe" aria-hidden="true"></span><p><b>引进高校资源。</b>与高校合作，吸引在校大学生、青年教师等创新创业人才，提供创新创业场地和配套硬件，搭建创新创业综合服务平台。海南大学 3 万名学生就在 2 公里内。</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="policy">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="kicker">入驻政策</span><h2>先免半年房租，再开始交费</h2></div>
+        <p>基地提供独立办公室和开放式工位两种选择，采用灵活的“轻创客”租赁模式，入驻即可办公。</p>
+      </div>
+      <div class="policy">
+        <div class="policy-main">
+          <div class="fig hi"><b>6<small>个月</small></b><h3>半年房租免租</h3><p>入驻前半年免收房租，半年后再交费用。</p></div>
+          <div class="fig"><b>3000<small>M</small></b><h3>免费宽带覆盖全场</h3><p>30 条电信宽带、每条 100M，可满足 150 人同时线上办公。</p></div>
+          <div class="fig"><b>9<small>间</small></b><h3>独立办公室</h3><p>玻璃隔断的独立房间，适合需要独立空间的团队。</p></div>
+          <div class="fig"><b>130<small>个</small></b><h3>开放式工位</h3><p>开放办公大厅，按工位灵活租用。</p></div>
+        </div>
+        <figure class="plan"><img src="assets/plan.jpg" alt="联创之星孵化基地平面布局图" loading="lazy" width="556" height="800"><figcaption>基地平面布局 · 总面积 883㎡</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="location">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="kicker">交通区位</span><h2>海南大学东门与老南门之间</h2></div>
+        <p>公交到门口，银行在隔壁，吃住选择都在步行范围内。</p>
+      </div>
+      <div class="loc">
+        <figure class="map"><img src="assets/map.jpg" alt="联创之星孵化基地周边地图" loading="lazy" width="1524" height="763"><figcaption>基地位置示意 · 海口市海甸岛</figcaption></figure>
+        <div>
+          <p class="addr">海口市海甸岛人民大道 25 号<br>景业广场二层商场一号铺面</p>
+          <dl class="facts">
+            <div><dt>高校</dt><dd>紧邻海南大学，进出海大约 2 公里</dd></div>
+            <div><dt>公交直达</dt><dd class="bus"><span>5</span><span>6</span><span>11</span><span>15</span><span>17</span><span>19</span><span>21</span><span>26</span><span>36</span><span>44</span></dd></div>
+            <div><dt>金融</dt><dd>中国银行、海南银行、建设银行、交通银行、工商银行、海南联合农商行、海南农村信用社</dd></div>
+            <div><dt>餐饮</dt><dd>1 公里内有肯德基、星巴克、永和豆浆等轻食</dd></div>
+            <div><dt>居住</dt><dd>拦海村、南洋小街、邦敦西里、市政花园、景业广场，民宿、小区、公寓高中低档可选</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><span>联创之星孵化基地 · 海口市海甸岛人民大道 25 号景业广场二层</span><span>3D 建筑为示意建模，尺寸与细节以现场为准</span></div>
+</footer>
+
+<div class="fade" id="fade"></div>
+<div class="hud" id="hud" role="dialog" aria-modal="true" aria-label="走进联创之星">
+  <div class="hud-top">
+    <button class="ghost" id="leave" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>返回全景</button>
+    <span class="brand"><span class="logo">联</span><span><strong>联创之星</strong><small>STEP INSIDE</small></span></span>
+    <span class="spacer" aria-hidden="true"></span>
+  </div>
+  <div class="hud-title">
+    <div><span class="kicker" id="hudKicker">走进基地</span><h2 id="hudName">沿街外观<span id="hudNo">01</span></h2></div>
+    <p id="hudPoints"></p>
+  </div>
+  <div class="journey" id="journey">
+    <ol><li data-s="1"><span>1</span>靠近景业广场</li><li data-s="2"><span>2</span>穿过入口</li><li data-s="3"><span>3</span>走进空间</li></ol>
+    <button type="button" id="skip">跳过运镜</button>
+  </div>
+  <div class="viewer" id="viewer">
+    <div class="frame" id="frame" tabindex="0" aria-label="实景照片：双击或按加号放大，放大后可拖动">
+      <img class="blur" id="photoBlur" alt="">
+      <img id="photo" alt="" draggable="false">
+      <button class="photo-nav prev" id="pPrev" type="button" aria-label="上一张照片"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button class="photo-nav next" id="pNext" type="button" aria-label="下一张照片"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+    <div class="viewer-bar">
+      <span class="cap" id="cap"></span>
+      <span class="count" id="count"></span>
+      <span class="seg" role="group" aria-label="查看方式"><button type="button" id="vFull" aria-pressed="true">完整画面</button><button type="button" id="vZoom" aria-pressed="false">放大细看</button></span>
+    </div>
+  </div>
+  <nav class="strip" id="strip" aria-label="切换空间"></nav>
+</div>
+
+<script>
+window.SPACES=[
+  {id:"street",name:"沿街外观",tag:"人民大道 25 号",points:["景业广场","公交站在门口"],desc:"景业广场临人民大道，一层是沿街商铺，二层就是联创之星。",photos:[["street","景业广场沿街立面，二层即联创之星孵化基地"]]},
+  {id:"entrance",name:"基地入口",tag:"二层商场一号铺面",points:["入驻宣传墙","高企孵化器"],desc:"走上景业广场二层商场，迎面就是基地的入驻宣传墙和入口。",photos:[["lobby","二层商场大厅里的入驻宣传墙"],["entrance","联创之星高企孵化企业入口"]]},
+  {id:"service",name:"企业服务区",tag:"前台与代办窗口",points:["工商注册","财税与法律咨询"],desc:"联创之星标识墙下的服务台，工商注册、变更代理、法律与政策咨询在这里办理。",photos:[["service","企业服务区与联创之星标识墙"]]},
+  {id:"workstations",name:"开放式工位",tag:"130 个工位",points:["开放办公大厅","拎包即可办公"],desc:"通透的开放办公大厅，130 个工位按需租用，入驻即可开工。",photos:[["workstations","开放式工位办公大厅"]]},
+  {id:"offices",name:"独立办公室",tag:"9 间",points:["玻璃隔断","独立团队空间"],desc:"玻璃隔断的独立办公室共 9 间，适合需要独立空间的创业团队。",photos:[["offices","玻璃隔断的独立办公室"]]},
+  {id:"meeting",name:"共享会议室",tag:"会议与培训",points:["长桌会议","投影培训"],desc:"入驻企业共用的会议室，开会、培训、路演都可以预约使用。",photos:[["meeting","共享会议室入口"],["meeting-2","会议室内的培训交流"]]},
+  {id:"lounge",name:"洽谈区",tag:"会客与洽谈",points:["公共洽谈间","中式茶室"],desc:"开放的公共洽谈区和一间中式茶室，用来接待来访客户、谈合作。",photos:[["lounge","公共洽谈区"],["tea","中式茶室会客厅"]]},
+  {id:"events",name:"创业活动",tag:"辅导与交流",points:["创业辅导","政策宣讲"],desc:"创业辅导、管理培训和政策咨询在基地里开展，入驻者就近参加。",photos:[["event","基地内的创业交流活动"],["event-2","创业者座谈交流"]]}
+];
+</script>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script>
+// Non-3D UI: space grid, photo viewer. Runs even if WebGL/CDN fails.
+(function(){
+  const S=window.SPACES, $=id=>document.getElementById(id), pad=n=>String(n).padStart(2,"0");
+  const grid=$("spaceGrid");
+  S.forEach((s,i)=>{
+    const b=document.createElement("button");b.type="button";b.className="card";b.dataset.enter=s.id;
+    b.innerHTML=`<span class="ph"><img src="assets/${s.photos[0][0]}-s.jpg" alt="${s.photos[0][1]}" loading="lazy"><span class="no">${pad(i+1)}</span>${s.photos.length>1?`<span class="pc">${s.photos.length} 张</span>`:""}</span><span class="tx"><strong>${s.name}</strong><small>${s.desc}</small></span>`;
+    grid.appendChild(b);
+  });
+  const strip=$("strip");
+  S.forEach((s,i)=>{
+    const b=document.createElement("button");b.type="button";b.dataset.go=s.id;
+    b.innerHTML=`<img src="assets/${s.photos[0][0]}-s.jpg" alt=""><span><i>${pad(i+1)}</i>${s.name}</span>`;
+    strip.appendChild(b);
+  });
+
+  // photo viewer
+  const V={space:null,idx:0,zoom:false,pan:{x:0,y:0}};
+  const frame=$("frame"),img=$("photo"),blur=$("photoBlur");
+  function apply(){const sc=V.zoom?1.9:1;img.style.transform=`translate(${V.zoom?V.pan.x:0}px,${V.zoom?V.pan.y:0}px) scale(${sc})`;frame.classList.toggle("zoomed",V.zoom);$("vFull").setAttribute("aria-pressed",!V.zoom);$("vZoom").setAttribute("aria-pressed",V.zoom);}
+  function setZoom(z){V.zoom=z;V.pan={x:0,y:0};apply();}
+  function show(){
+    const s=V.space,p=s.photos[V.idx];
+    img.style.opacity=0;
+    const src=`assets/${p[0]}.jpg`;
+    const pre=new Image();pre.onload=pre.onerror=()=>{img.src=src;blur.src=`assets/${p[0]}-s.jpg`;img.alt=p[1];img.style.opacity=1;};pre.src=src;
+    $("cap").textContent=p[1];
+    $("count").textContent=s.photos.length>1?`${V.idx+1} / ${s.photos.length}`:"";
+    $("pPrev").hidden=$("pNext").hidden=s.photos.length<2;
+    setZoom(false);
+  }
+  function setSpace(id){
+    const i=S.findIndex(s=>s.id===id);V.space=S[i];V.idx=0;
+    $("hudName").firstChild.nodeValue=V.space.name;$("hudNo").textContent=pad(i+1);
+    $("hudPoints").textContent=V.space.desc;
+    strip.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current",b.dataset.go===id?"true":"false"));
+    const cur=strip.querySelector(`[data-go="${id}"]`);cur&&cur.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"});
+    show();
+  }
+  function step(d){const s=V.space;if(!s)return;if(s.photos.length>1&&((d>0&&V.idx<s.photos.length-1)||(d<0&&V.idx>0))){V.idx+=d;show();return;}
+    const i=S.indexOf(s),n=(i+d+S.length)%S.length;setSpace(S[n].id);if(d<0&&S[n].photos.length>1){V.idx=S[n].photos.length-1;show();}}
+  $("pPrev").onclick=()=>{const s=V.space;V.idx=(V.idx-1+s.photos.length)%s.photos.length;show();};
+  $("pNext").onclick=()=>{const s=V.space;V.idx=(V.idx+1)%s.photos.length;show();};
+  $("vFull").onclick=()=>setZoom(false);$("vZoom").onclick=()=>setZoom(true);
+  frame.addEventListener("dblclick",e=>{if(e.target.closest("button"))return;setZoom(!V.zoom);});
+  frame.addEventListener("wheel",e=>{e.preventDefault();setZoom(e.deltaY<0);},{passive:false});
+  const ptr=new Map();let pinch=0,moved=false;
+  function clampPan(){const w=frame.clientWidth*.45,h=frame.clientHeight*.45;V.pan.x=Math.max(-w,Math.min(w,V.pan.x));V.pan.y=Math.max(-h,Math.min(h,V.pan.y));}
+  frame.addEventListener("pointerdown",e=>{if(e.target.closest("button"))return;frame.setPointerCapture(e.pointerId);ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=false;if(ptr.size===2){const[a,b]=[...ptr.values()];pinch=Math.hypot(a.x-b.x,a.y-b.y);}frame.classList.add("dragging");});
+  frame.addEventListener("pointermove",e=>{const o=ptr.get(e.pointerId);if(!o)return;ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(ptr.size===2){const[a,b]=[...ptr.values()],r=Math.hypot(a.x-b.x,a.y-b.y)/(pinch||1);if(r>1.15&&!V.zoom)setZoom(true);else if(r<.85&&V.zoom)setZoom(false);return;}
+    const dx=e.clientX-o.x,dy=e.clientY-o.y;if(Math.abs(dx)+Math.abs(dy)>2)moved=true;if(V.zoom){V.pan.x+=dx;V.pan.y+=dy;clampPan();apply();}});
+  const up=e=>{ptr.delete(e.pointerId);if(!ptr.size)frame.classList.remove("dragging");};
+  frame.addEventListener("pointerup",up);frame.addEventListener("pointercancel",up);
+  frame.addEventListener("keydown",e=>{const k=e.key;if(k==="+"||k==="="){setZoom(true);e.preventDefault();}if(k==="-"){setZoom(false);e.preventDefault();}
+    if(V.zoom&&k.startsWith("Arrow")){e.preventDefault();e.stopPropagation();const m={ArrowLeft:[40,0],ArrowRight:[-40,0],ArrowUp:[0,40],ArrowDown:[0,-40]}[k];V.pan.x+=m[0];V.pan.y+=m[1];clampPan();apply();}});
+  window.Viewer={setSpace,step,get zoom(){return V.zoom}};
+})();
+</script>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const $=id=>document.getElementById(id);
+const stage=$("stage"), hud=$("hud"), fade=$("fade");
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+let renderer;
+try{ renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); }
+catch(e){ $("loading").remove(); stage.insertAdjacentHTML("beforeend",'<div class="fallback"><strong>当前浏览器无法显示 3D 模型</strong><span>请换用支持 WebGL 的浏览器。实景空间和基地介绍仍可正常浏览。</span></div>'); }
+if(renderer) init();
+
+function init(){
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
+stage.prepend(renderer.domElement);
+renderer.domElement.setAttribute("aria-label","景业广场三维示意模型，可拖动旋转、滚轮缩放");
+renderer.domElement.setAttribute("role","img");
+
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(38,1,.1,400);
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true; controls.dampingFactor=.07; controls.minDistance=9; controls.maxDistance=78; controls.maxPolarAngle=1.42; controls.autoRotate=!reduce; controls.autoRotateSpeed=.45; controls.enablePan=false;
+
+const VIEWS=[
+  {p:[30,21,36],t:[0,4.2,0]},
+  {p:[2,5,27],t:[0,3,3]},
+  {p:[8.5,4.2,14.5],t:[0,2.6,4.5]},
+  {p:[-17,4.5,17],t:[-8.5,1.2,7]}
+];
+camera.position.set(...VIEWS[0].p); controls.target.set(...VIEWS[0].t);
+
+// lights
+const hemi=new THREE.HemisphereLight(0xdfe9ff,0x3b4458,1.1); scene.add(hemi);
+const sun=new THREE.DirectionalLight(0xfff1dc,2.3); sun.position.set(18,30,20); sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048); Object.assign(sun.shadow.camera,{left:-30,right:30,top:30,bottom:-30,near:1,far:90}); sun.shadow.bias=-.0004; scene.add(sun);
+
+const std=(c,o={})=>new THREE.MeshStandardMaterial({color:c,roughness:.8,...o});
+const M={
+  plate:std(0x243049),edge:std(0x1a2336),road:std(0x3a4152,{roughness:.95}),walk:std(0xc9c6bd),plaza:std(0xb9b4a8),
+  wall:std(0xe8e2d4),wall2:std(0xd8d0bf),trim:std(0x8e98a8),dark:std(0x2a3140),
+  glass:std(0x6f93b3,{roughness:.15,metalness:.35,emissive:0xffd89a,emissiveIntensity:0}),
+  white:std(0xf3f4f6),line:std(0xf2f2ee),yellow:std(0xf5c21b),green:std(0x46b163),red:std(0xe3372d),
+  trunk:std(0x8a6a48),leaf:std(0x2f8f4e,{side:THREE.DoubleSide}),bulb:std(0xfff2c9,{emissive:0xffd27a,emissiveIntensity:0})
+};
+const add=(geo,mat,x,y,z,o={})=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);if(o.ry)m.rotation.y=o.ry;m.castShadow=o.cast!==false;m.receiveShadow=true;(o.parent||scene).add(m);return m;};
+const box=(w,h,d,mat,x,y,z,o)=>add(new THREE.BoxGeometry(w,h,d),mat,x,y+h/2,z,o);
+
+function canvasTex(w,h,draw){const c=document.createElement("canvas");c.width=w;c.height=h;const g=c.getContext("2d");draw(g,w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;t.userData.redraw=()=>{g.clearRect(0,0,w,h);draw(g,w,h);t.needsUpdate=true;};return t;}
+
+// base plate & ground
+box(46,.8,32,M.edge,0,-.9,1);
+box(45,.1,31,M.plate,0,-.1,1,{cast:false});
+box(45,.06,6,M.road,0,0,11.5,{cast:false});
+for(let x=-21;x<22;x+=3) box(1.6,.02,.14,M.line,x,.06,11.5,{cast:false});
+box(45,.02,.08,M.line,0,.06,8.7,{cast:false}); box(45,.02,.08,M.line,0,.06,14.3,{cast:false});
+for(let i=0;i<7;i++) box(.38,.02,4.8,M.line,15+i*.62,.06,11.5,{cast:false});
+box(45,.14,3.8,M.walk,0,0,6.6,{cast:false});
+box(30,.12,8.8,M.plaza,0,0,.2,{cast:false});
+box(45,.1,1.2,M.walk,0,0,15.2,{cast:false});
+
+// podium: 3 storeys, 22 x 9, with an angled east wing following the floor plan
+const PW=22,PD=9,PZ=.2;
+box(PW,1.4,PD,M.wall2,0,0,PZ);
+box(PW,1.2,PD,M.wall,0,1.4,PZ);
+box(PW,1.1,PD,M.wall2,0,2.6,PZ);
+box(PW+.3,.18,PD+.3,M.trim,0,3.7,PZ);
+const wing=new THREE.Group(); wing.position.set(12.2,0,1.2); wing.rotation.y=-.62; scene.add(wing);
+box(6,3.7,6.5,M.wall,0,0,0,{parent:wing}); box(6.2,.18,6.7,M.trim,0,3.7,0,{parent:wing});
+box(5.4,.9,.08,M.glass,0,1.5,3.26,{parent:wing}); box(5.4,.7,.08,M.glass,0,2.7,3.26,{parent:wing});
+const FZ=PZ+PD/2+.04;
+
+// 1F shopfronts with plain colored fascia (no brand names)
+const fascia=[0xb8372f,0x2e7d5b,0x1f5fa8,0xd98a1c,0x5d4a9a,0x2b8a8a,0x9c6b2f,0x3f6fb0];
+const shops=[-9.6,-7,-4.4,4.4,7,9.6];
+shops.forEach((x,i)=>{box(2.4,1,.1,M.glass,x,.1,FZ);box(2.5,.28,.16,std(fascia[i]),x,1.1,FZ+.03);});
+// mall entrance, centre
+box(4.6,1.36,.3,M.dark,0,0,FZ-.12,{cast:false});
+box(3.2,1.1,.08,M.glass,0,0,FZ+.06);
+box(5.2,.12,1.6,M.white,0,1.28,FZ+.8);
+box(3,.02,1.8,M.red,0,.08,FZ+1.2,{cast:false});
+[-2.4,2.4].forEach(x=>box(.14,1.3,.14,M.trim,x,0,FZ+1.5));
+
+// 2F: 联创之星 glass band showing the yellow/green stripe walls inside
+const stripeTex=canvasTex(1024,128,(g,w,h)=>{g.fillStyle="#f5c21b";g.fillRect(0,0,w,h);g.save();g.translate(0,0);for(let x=-h;x<w+h;x+=96){g.fillStyle="#46b163";g.beginPath();g.moveTo(x,h);g.lineTo(x+46,h);g.lineTo(x+46+h*.8,0);g.lineTo(x+h*.8,0);g.fill();}g.restore();for(let x=0;x<w;x+=64){g.fillStyle="rgba(20,30,50,.55)";g.fillRect(x,0,3,h);}g.fillStyle="rgba(255,255,255,.18)";g.fillRect(0,0,w,10);});
+stripeTex.wrapS=THREE.RepeatWrapping;
+const bandMat=std(0xffffff,{map:stripeTex,roughness:.25,metalness:.1,emissive:0xffffff,emissiveMap:stripeTex,emissiveIntensity:.08});
+box(PW-1,.85,.08,bandMat,0,1.58,FZ);
+const signTex=canvasTex(1024,160,(g,w,h)=>{g.fillStyle="#0f1a30";g.fillRect(0,0,w,h);g.fillStyle="#e3372d";g.fillRect(28,26,108,108);g.fillStyle="#fff";g.font="bold 78px 'ZCOOL QingKe HuangYou','Noto Sans SC',sans-serif";g.textBaseline="middle";g.fillText("联",42,84);g.font="92px 'ZCOOL QingKe HuangYou','Noto Sans SC',sans-serif";g.fillText("联创之星",170,86);g.font="500 34px 'Noto Sans SC',sans-serif";g.fillStyle="#f5c21b";g.fillText("孵化基地 · 2F",630,90);});
+const signMat=std(0xffffff,{map:signTex,emissive:0xffffff,emissiveMap:signTex,emissiveIntensity:.25,roughness:.5});
+box(8.4,1.3,.12,signMat,0,2.72-0.05,FZ+.05);
+const bannerTex=canvasTex(256,512,(g,w,h)=>{g.fillStyle="#e3372d";g.fillRect(0,0,w,h);g.fillStyle="#fff";g.font="bold 58px 'Noto Sans SC',sans-serif";g.textAlign="center";["高企","孵化器"].forEach((t,i)=>g.fillText(t,w/2,120+i*80));g.font="500 32px 'Noto Sans SC',sans-serif";["免费注册公司","财税代理","企业孵化"].forEach((t,i)=>g.fillText(t,w/2,330+i*48));});
+box(1.3,2.2,.12,std(0xffffff,{map:bannerTex,emissive:0xffffff,emissiveMap:bannerTex,emissiveIntensity:.2}),6.3,1.45,FZ+.07);
+// 3F windows
+for(let x=-10;x<=10;x+=2.5) if(Math.abs(x)>4.3) box(1.8,.62,.08,M.glass,x,2.82,FZ);
+
+// towers
+const winLit=[];
+function towerTex(seed,lit){return canvasTex(256,512,(g,w,h)=>{let r=seed;const rnd=()=>((r=(r*9301+49297)%233280)/233280);g.fillStyle=lit?"#000":"#ece6d8";g.fillRect(0,0,w,h);const rows=18,cols=6;for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){const x=12+i*(w-24)/cols,y=10+j*(h-20)/rows,ww=(w-24)/cols-12,hh=(h-20)/rows-10;if(lit){if(rnd()<.42){g.fillStyle=rnd()<.7?"#ffcf7a":"#dfe8ff";g.fillRect(x,y,ww,hh);}}else{g.fillStyle="#6f8aa6";g.fillRect(x,y,ww,hh);g.fillStyle="#d2c9b6";g.fillRect(x-4,y+hh,ww+8,4);}}});}
+function tower(x,z,w,d,seed){
+  const H=10.8, m=std(0xffffff,{map:towerTex(seed,false),emissive:0xffffff,emissiveMap:towerTex(seed,true),emissiveIntensity:0,roughness:.7});
+  winLit.push(m);
+  const roof=M.wall2;
+  const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,H,d),[m,m,roof,roof,m,m]);mesh.position.set(x,3.88+H/2,z);mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
+  for(let k=0;k<3;k++) box(.35,H,.35,M.white,x+(k-1)*w/2.02,3.88,z+d/2+.02);
+  box(w*.55,1,d*.5,M.wall,x,3.88+H,z); box(w*.3,.9,.3,M.yellow,x,3.88+H+1,z+d*.25-.15);
+  box(w+.3,.2,d+.3,M.trim,x,3.88+H,z);
+}
+tower(-5.6,-1.2,5.2,4.6,7); tower(5.6,-1.2,5.2,4.6,19);
+// podium roof garden
+[[-10,2.6],[-1,2.6],[1,-2],[10,2.6],[10,-2.4],[-10,-2.4]].forEach(([x,z])=>{box(1.6,.3,.9,M.wall2,x,3.88,z);add(new THREE.SphereGeometry(.5,10,8),M.leaf,x,4.4,z).scale.set(1.4,.7,.8);});
+
+// palms
+function palm(x,z,s=1){
+  const g=new THREE.Group();g.position.set(x,.1,z);g.scale.setScalar(s);scene.add(g);
+  let y=0,px=0;for(let i=0;i<6;i++){const seg=add(new THREE.CylinderGeometry(.09-i*.008,.11-i*.008,.62,7),M.trunk,px,y+.31,0,{parent:g});y+=.6;px+=.04*i;seg.rotation.z=-.05*i;}
+  for(let k=0;k<7;k++){const f=new THREE.Mesh(new THREE.ConeGeometry(.22,1.7,4,1,true),M.leaf);f.castShadow=true;f.position.set(px,y,0);f.rotation.set(0,k/7*Math.PI*2,1.95);f.translateY(.75);f.scale.set(1,1,.25);g.add(f);}
+  add(new THREE.SphereGeometry(.16,8,6),M.trunk,px,y,0,{parent:g});
+}
+[-19,-14.5,-4.3,4.3,12.5,18.5].forEach((x,i)=>palm(x,5.3,1+(i%2)*.12));
+[-19,-6,6,19].forEach(x=>palm(x,15.4,.8));
+
+// street lamps
+const lampLights=[];
+[-16.5,-1.8,9.5].forEach((x,i)=>{box(.1,2.6,.1,M.dark,x,.1,8);box(.8,.08,.1,M.dark,x-.35,2.66,8);add(new THREE.SphereGeometry(.13,10,8),M.bulb,x-.7,2.6,8);if(i<3){const l=new THREE.PointLight(0xffc977,0,9,1.6);l.position.set(x-.7,2.4,8.2);scene.add(l);lampLights.push(l);}});
+
+// bus stop (10 routes stop at the door)
+const BX=-9.2;
+[-1.3,1.3].forEach(dx=>box(.08,1.6,.08,M.dark,BX+dx,.1,7.9));
+box(3,.1,1.1,M.green,BX,1.72,7.6); box(2.8,1.1,.05,M.glass,BX,.4,7.1);
+box(.7,1.2,.1,M.yellow,BX+1.9,.1,8.1);
+const stopTex=canvasTex(256,128,(g,w,h)=>{g.fillStyle="#46b163";g.fillRect(0,0,w,h);g.fillStyle="#fff";g.font="bold 40px 'Noto Sans SC',sans-serif";g.textAlign="center";g.fillText("景业广场站",w/2,56);g.font="500 22px 'IBM Plex Mono',monospace";g.fillText("5 6 11 15 17 19 21 26 36 44",w/2,100);});
+box(1.6,.8,.06,std(0xffffff,{map:stopTex}),BX,1.82,8.1);
+
+// vehicles
+function vehicle(len,body,stripe){const g=new THREE.Group();scene.add(g);box(len,1,1.3,body,0,.3,0,{parent:g});box(len-.4,.35,1.32,M.glass,0,.85,0,{parent:g});box(len,.14,1.32,stripe,0,.55,0,{parent:g});[[-1,1],[1,1],[-1,-1],[1,-1]].forEach(([a,b])=>add(new THREE.CylinderGeometry(.24,.24,.2,12),M.dark,a*(len/2-.6),.26,b*.6,{parent:g}).rotation.x=Math.PI/2);return g;}
+const bus=vehicle(4.4,M.white,M.green); bus.position.set(-22,0,10);
+const car1=vehicle(2.2,std(0x2f4d7a),M.dark); car1.scale.set(1,.75,.9); car1.position.set(20,0,13);
+const car2=vehicle(2.2,std(0xd8d4cc),M.dark); car2.scale.set(1,.75,.9); car2.position.set(2,0,13);
+const veh={bx:-22,wait:0,c1:20,c2:2};
+
+// grid under plate
+const grid=new THREE.GridHelper(140,70,0x2a3a5c,0x1a2540);grid.position.y=-1.2;grid.material.transparent=true;grid.material.opacity=.5;scene.add(grid);
+
+// labels
+const HOT=[
+  {t:"二层 · 联创之星",p:[0,3.5,FZ+.3],main:1,go:"entrance"},
+  {t:"沿街商铺",p:[-8.3,1.5,FZ+.2],view:1},
+  {t:"景业广场站",p:[BX,2.5,8.1],view:3},
+  {t:"景业广场",p:[5.6,15.7,-1.2],view:0}
+];
+const ui=$("stageUi");
+HOT.forEach(h=>{const b=document.createElement("button");b.type="button";b.className="hotspot"+(h.main?" main":"");b.textContent=h.t;b.onclick=()=>h.go?enter(h.go):setView(h.view);ui.appendChild(b);h.el=b;});
+const v3=new THREE.Vector3();
+function placeLabels(){const w=renderer.domElement.clientWidth,h=renderer.domElement.clientHeight,hide=mode!=="idle";
+  HOT.forEach(o=>{v3.set(...o.p).project(camera);const off=hide||v3.z>1||Math.abs(v3.x)>1.05||Math.abs(v3.y)>1.05;o.el.dataset.off=off?"1":"0";o.el.style.left=((v3.x+1)/2*w)+"px";o.el.style.top=((1-v3.y)/2*h)+"px";});}
+
+// night
+let night=false;
+function setNight(n){night=n;stage.classList.toggle("night",n);$("tNight").setAttribute("aria-pressed",n);
+  hemi.intensity=n?.35:1.1; hemi.color.set(n?0x6d82b8:0xdfe9ff); sun.intensity=n?.35:2.3; sun.color.set(n?0x9fb4ff:0xfff1dc);
+  winLit.forEach(m=>m.emissiveIntensity=n?1.1:0); M.glass.emissiveIntensity=n?.55:0; M.bulb.emissiveIntensity=n?2:0;
+  bandMat.emissiveIntensity=n?.7:.08; signMat.emissiveIntensity=n?1:.25; lampLights.forEach(l=>l.intensity=n?6:0);}
+$("tNight").onclick=()=>setNight(!night);
+$("tRotate").onclick=()=>{controls.autoRotate=!controls.autoRotate;$("tRotate").setAttribute("aria-pressed",controls.autoRotate);};
+const dolly=f=>{const off=camera.position.clone().sub(controls.target);const len=THREE.MathUtils.clamp(off.length()*f,controls.minDistance,controls.maxDistance);fly(controls.target.clone().add(off.setLength(len)),controls.target.clone(),reduce?0:450);};
+$("tIn").onclick=()=>dolly(.78);$("tOut").onclick=()=>dolly(1.28);$("tReset").onclick=()=>setView(0);
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>setView(+b.dataset.view));
+function setView(i){document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.view===i));const v=VIEWS[i];fly(new THREE.Vector3(...v.p),new THREE.Vector3(...v.t),reduce?0:1300);}
+document.fonts&&document.fonts.ready.then(()=>{signTex.userData.redraw();bannerTex.userData.redraw();stopTex.userData.redraw();});
+
+// camera tween
+let tw=null;
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function fly(p,t,dur){if(tw)tw.done();return new Promise(res=>{if(!dur){camera.position.copy(p);controls.target.copy(t);res();return;}
+  tw={p0:camera.position.clone(),t0:controls.target.clone(),p1:p,t1:t,s:performance.now(),dur,done(){camera.position.copy(p);controls.target.copy(t);tw=null;res();}};});}
+
+// immersive journey
+let mode="idle", token=0;
+const setStep=n=>document.querySelectorAll("#journey li").forEach(li=>{const s=+li.dataset.s;li.className=s===n?"now":s<n?"done":"";});
+async function enter(id){
+  const my=++token; window.Viewer.setSpace(id);
+  if(mode==="inside"){return;}
+  mode="journey"; document.body.classList.add("is-immersive"); stage.classList.add("immersive"); hud.classList.add("on");
+  $("viewer").classList.remove("on"); $("journey").hidden=false; $("hudKicker").textContent="走进基地"; resize();
+  controls.enabled=false; const wasRotate=controls.autoRotate; controls.autoRotate=false; stage.dataset.rot=wasRotate?"1":"";
+  const d=reduce?0:1;
+  setStep(1); await fly(new THREE.Vector3(3.5,4.2,19),new THREE.Vector3(0,2.2,FZ),1600*d); if(my!==token)return;
+  setStep(2); await fly(new THREE.Vector3(0,.95,FZ+2.2),new THREE.Vector3(0,.95,FZ-3),1500*d); if(my!==token)return;
+  fade.classList.add("on"); await wait(reduce?0:450); if(my!==token)return;
+  setStep(3); inside();
+}
+function inside(){mode="inside";hud.classList.add("inside");$("journey").hidden=true;$("hudKicker").textContent="STEP INSIDE · 实景空间";
+  $("viewer").classList.add("on");fade.classList.remove("on");$("frame").focus({preventScroll:true});}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+$("skip").onclick=()=>{const my=++token;if(tw)tw.done();fade.classList.add("on");setTimeout(()=>{if(my===token){setStep(3);inside();}},reduce?0:250);};
+async function leave(){
+  const my=++token; if(tw)tw.done(); $("viewer").classList.remove("on"); $("journey").hidden=true; hud.classList.remove("inside"); mode="returning";
+  const v=VIEWS[0]; await fly(new THREE.Vector3(...v.p),new THREE.Vector3(...v.t),reduce?0:1500); if(my!==token)return;
+  mode="idle"; hud.classList.remove("on"); stage.classList.remove("immersive"); document.body.classList.remove("is-immersive");
+  controls.enabled=true; controls.autoRotate=!!stage.dataset.rot; resize();
+  document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.view==="0"));
+}
+$("leave").onclick=leave;
+document.addEventListener("click",e=>{const b=e.target.closest("[data-enter]");if(b)enter(b.dataset.enter);const g=e.target.closest("[data-go]");if(g){window.Viewer.setSpace(g.dataset.go);if(mode!=="inside"&&mode!=="journey")enter(g.dataset.go);}});
+document.addEventListener("keydown",e=>{if(mode==="idle")return;if(e.key==="Escape"){e.preventDefault();leave();}
+  if(mode==="inside"&&!window.Viewer.zoom){if(e.key==="ArrowRight")window.Viewer.step(1);if(e.key==="ArrowLeft")window.Viewer.step(-1);}});
+
+// resize + loop
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w<640?48:38;camera.updateProjectionMatrix();}
+new ResizeObserver(resize).observe(stage); resize();
+$("loading").remove();
+let last=performance.now();
+renderer.setAnimationLoop(now=>{
+  const dt=Math.min(.05,(now-last)/1000);last=now;
+  if(tw){const k=Math.min(1,(now-tw.s)/tw.dur),e=ease(k);camera.position.lerpVectors(tw.p0,tw.p1,e);controls.target.lerpVectors(tw.t0,tw.t1,e);if(k>=1)tw.done();}
+  else if(mode==="inside"){const a=now*.00005;camera.position.set(Math.sin(a)*34,20,Math.cos(a)*34);controls.target.set(0,4,0);}
+  if(!reduce){ if(veh.wait>0)veh.wait-=dt; else {veh.bx+=dt*3.2; if(!veh.stopped&&veh.bx>=BX){veh.bx=BX;veh.wait=2.5;veh.stopped=true;} if(veh.bx>24){veh.bx=-24;veh.stopped=false;}}
+    bus.position.x=veh.bx; veh.c1-=dt*4.5; veh.c2-=dt*3.6; if(veh.c1<-24)veh.c1=24; if(veh.c2<-24)veh.c2=24; car1.position.x=veh.c1; car2.position.x=veh.c2; }
+  controls.update(); renderer.render(scene,camera); placeLabels();
+});
+}
+</script>
+
+<script src="../shared/basebar.js" defer></script></body>
+</html>

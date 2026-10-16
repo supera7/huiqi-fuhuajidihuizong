@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>惠企孵化基地总览</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="惠企五大孵化基地 3D 总览：海南海商智谷、联创之星、惠企共产小院、惠企创业社区、热海大国家大学科技园。在海南岛三维地图上选择基地，进入各自的 3D 园区。">
+<meta name="theme-color" content="#06111c">
+<script>
+/* 手机打开首页时自动跳到竖屏版 m.html。
+   平板和电脑不跳；在手机版点「电脑版」进来的（#pc），本次浏览不再跳。 */
+(function () {
+  try {
+    if (location.hash === "#pc") { sessionStorage.setItem("hq-pc", "1"); return; }
+    if (sessionStorage.getItem("hq-pc") === "1") return;
+  } catch (e) {}
+  var ua = navigator.userAgent || "";
+  var phoneUA = /iPhone|iPod|Windows Phone/i.test(ua) || (/Android|HarmonyOS/i.test(ua) && /Mobile/i.test(ua));
+  var coarse = window.matchMedia && matchMedia("(pointer: coarse)").matches;
+  var small = Math.min(screen.width, screen.height) < 600;
+  if (phoneUA || (coarse && small)) location.replace("m.html");
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&display=swap">
+<style>
+/* Layout: 3D Hainan island map as the opener (five light beacons, Haikou cluster drawn enlarged) with a selected-base panel → the five bases as long rows → footer.
+   Motif: chart graticule — real lat/long lines and coordinates, like a nautical chart of the island. */
+:root{
+  --sea:#06111c; --sea-2:#0b1b2a; --panel:#0f2233; --line:rgba(170,205,230,.13); --line-2:rgba(170,205,230,.26);
+  --fg:#edf3f7; --muted:#9bb0c0; --dim:#677f92; --sand:#e9dcbc;
+  --c1:#c3f879; --c2:#f5c21b; --c3:#2fb5c4; --c4:#c99a5b; --c5:#f07a3a;
+  --display:"Noto Serif SC","Songti SC","STSong",serif;
+  --body:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --wrap:1240px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--sea);color:var(--fg);font:15px/1.7 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--sea)}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--sand);outline-offset:3px;border-radius:6px}
+h1,h2,h3{text-wrap:balance;margin:0;font-weight:400}
+img{max-width:100%;display:block}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:700px){.wrap{padding-left:max(40px,env(safe-area-inset-left,0px));padding-right:max(40px,env(safe-area-inset-right,0px))}}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--sea) 86%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;min-height:64px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-width:0}
+.mark{width:34px;height:34px;flex:none;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center}
+.mark i{width:6px;height:6px;border-radius:50%;background:var(--sand);box-shadow:0 0 0 5px rgba(233,220,188,.12)}
+.brand strong{display:block;font:900 18px/1.15 var(--display);letter-spacing:.08em;white-space:nowrap}
+.brand small{display:block;font:500 10px/1.4 var(--mono);color:var(--muted);letter-spacing:.16em;white-space:nowrap}
+.nav{margin-left:auto;display:flex;gap:4px}
+.nav a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--muted);font-size:14px}
+.nav a:hover{color:var(--fg);background:var(--panel)}
+.mlink{display:none;margin-left:auto;font-size:13px;color:var(--sand);text-decoration:none;padding:6px 12px;border:1px solid var(--line-2);border-radius:999px}
+@media (max-width:640px){.nav{display:none}.mlink{display:inline-block}}
+
+/* hero map */
+.hero{position:relative;height:clamp(580px,84vh,820px);border-bottom:1px solid var(--line);overflow:hidden;background:#061521}
+#map{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+.labels{position:absolute;inset:0;pointer-events:none}
+.pin{position:absolute;left:0;top:0;pointer-events:auto;transform:translate(-50%,-100%);border:0;background:none;padding:0 0 10px;display:flex;flex-direction:column;align-items:center;gap:0;will-change:transform}
+.pin span{display:block;padding:5px 10px;border-radius:999px;background:rgba(6,17,28,.82);border:1px solid var(--line-2);font:500 12px/1.2 var(--body);white-space:nowrap;transition:background .2s,border-color .2s}
+.pin span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--c);margin-right:7px;vertical-align:1px}
+.pin:hover span,.pin[aria-pressed=true] span{border-color:var(--c);background:rgba(6,17,28,.95)}
+.pin.compact span{font-size:0;padding:5px}.pin.compact span::before{margin:0}
+@media (max-width:640px){.pin[aria-pressed=false] span{font-size:0;padding:5px}.pin[aria-pressed=false] span::before{margin:0}}
+.hk{position:absolute;left:0;top:0;padding:6px 12px;margin-top:4px;border-radius:999px;background:rgba(6,21,33,.85);border:1px solid rgba(241,227,189,.5);font:600 12px/1 var(--body);letter-spacing:.08em;color:var(--sand);white-space:nowrap;pointer-events:none}
+.region{position:absolute;left:0;top:0;font:500 11px/1 var(--body);letter-spacing:.35em;color:rgba(240,236,220,.55);text-shadow:0 1px 6px rgba(0,0,0,.6);white-space:nowrap;pointer-events:none}
+.peak{position:absolute;left:0;top:0;font:500 10.5px/1 var(--mono);color:rgba(240,236,220,.8);text-shadow:0 1px 6px rgba(0,0,0,.7);white-space:nowrap;pointer-events:none}
+.sea{position:absolute;left:0;top:0;font:600 15px/1 var(--display);letter-spacing:.3em;color:rgba(150,200,225,.35);white-space:nowrap;pointer-events:none}
+@media (max-width:640px){.region{font-size:9.5px;letter-spacing:.2em}.peak{display:none}}
+.city{position:absolute;left:0;top:0;font:600 12px/1 var(--body);letter-spacing:.2em;color:var(--sand);text-shadow:0 1px 8px rgba(0,0,0,.8);white-space:nowrap;pointer-events:none}
+.grat{position:absolute;left:0;top:0;transform:translate(-50%,-50%);font:400 10px/1 var(--mono);color:var(--dim);white-space:nowrap}
+
+.intro{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;pointer-events:none}
+.intro .wrap{padding-block:clamp(28px,6vh,64px)}
+.eyebrow{font:500 11px/1 var(--mono);letter-spacing:.18em;color:var(--sand);text-transform:uppercase}
+.intro::before{content:"";position:absolute;inset:0 auto 0 0;width:min(620px,60%);background:linear-gradient(90deg,rgba(6,21,33,.82),rgba(6,21,33,0));pointer-events:none;z-index:-1}
+.intro h1{margin-top:16px;font:900 clamp(32px,5vw,58px)/1.12 var(--display);letter-spacing:.02em;max-width:9em;text-shadow:0 2px 24px rgba(6,17,28,.8)}
+.intro h1 em{font-style:normal;color:var(--sand)}
+.intro p{margin:14px 0 0;max-width:26em;color:var(--muted);text-shadow:0 1px 12px rgba(6,17,28,.9)}
+
+.card{position:absolute;z-index:3;right:max(16px,env(safe-area-inset-right,0px));bottom:20px;width:min(360px,calc(100% - 32px));background:rgba(9,22,34,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line-2);border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+@media (min-width:700px){.card{right:max(40px,env(safe-area-inset-right,0px));bottom:32px}}
+@media (min-width:1000px){
+  .card{right:auto;left:max(40px,calc((100vw - var(--wrap)) / 2 + 40px),env(safe-area-inset-left,0px));bottom:84px;width:470px;display:grid;grid-template-columns:170px minmax(0,1fr)}
+  .card img{height:100%;aspect-ratio:auto}
+  .card .in{padding:14px 16px 16px;gap:6px}
+  .card h2{font-size:19px}
+  .card p{font-size:13px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .card .go{padding:9px 13px;font-size:13px}
+  .step{width:34px;height:34px}
+}
+.card img{width:100%;aspect-ratio:16/9;object-fit:cover;max-width:100%}
+.card .in{padding:16px 18px 18px;display:grid;gap:8px}
+.card .tag{display:flex;justify-content:space-between;gap:12px;font:500 11px/1.3 var(--mono);color:var(--muted);letter-spacing:.06em}
+.card .tag b{font-weight:500;color:var(--cc)}
+.card h2{font:900 22px/1.25 var(--display)}
+.card p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.65}
+.card .row{display:flex;gap:8px;margin-top:6px;align-items:center}
+.go{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;background:var(--cc,var(--sand));color:#0a1218;font-weight:700;font-size:14px;text-decoration:none;transition:transform .15s,filter .15s}
+.go:hover{transform:translateY(-1px);filter:brightness(1.08)}
+.go svg{width:15px;height:15px}
+.step{width:38px;height:38px;border-radius:10px;border:1px solid var(--line-2);background:transparent;display:grid;place-items:center}
+.step:hover{border-color:var(--fg)}
+.step svg{width:16px;height:16px}
+.card .row .count{margin-left:auto;font:500 12px/1 var(--mono);color:var(--dim)}
+@media (max-width:640px){
+  .hero{height:auto;min-height:0;display:flex;flex-direction:column}
+  .card{position:relative;right:auto;bottom:auto;width:auto;margin:0 16px 20px;margin-left:max(16px,env(safe-area-inset-left,0px));margin-right:max(16px,env(safe-area-inset-right,0px))}
+  .card img{aspect-ratio:21/9}
+}
+.stage{position:absolute;inset:0}
+.mapbox{position:absolute;inset:0}
+.hint{position:absolute;left:0;right:0;bottom:24px;pointer-events:none}
+.hint .wrap{display:flex;align-items:center;gap:16px;font:400 11px/1 var(--mono);color:var(--dim);letter-spacing:.08em}
+.whole{pointer-events:auto;padding:8px 14px;border-radius:999px;border:1px solid var(--line-2);background:rgba(6,17,28,.7);font:500 12px/1 var(--body);color:var(--fg);letter-spacing:0}
+.whole:hover{border-color:var(--fg)}
+@media (max-width:640px){
+  .stage{position:relative;display:flex;flex-direction:column}
+  .intro{position:relative;order:-1;bottom:auto}.intro::before{display:none}
+  .intro .wrap{padding-block:28px 4px}
+  .intro h1{font-size:30px}
+  .mapbox{position:relative;height:400px}
+  .hint{bottom:12px}.hint span{display:none}
+}
+
+/* list */
+section{padding-block:clamp(56px,9vw,96px)}
+.head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px 40px;margin-bottom:32px}
+.head h2{font:900 clamp(26px,3.4vw,38px)/1.2 var(--display)}
+.head p{margin:0;color:var(--muted);max-width:32em}
+.bases{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.base{display:grid;grid-template-columns:44px minmax(0,220px) minmax(0,1fr) auto;gap:24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--line)}
+.base .no{font:500 13px/1 var(--mono);color:var(--cc)}
+.base img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px}
+.base .txt{min-width:0;display:grid;gap:6px}
+.base h3{font:900 22px/1.3 var(--display)}
+.base .addr{font-size:13.5px;color:var(--muted)}
+.base .coord{font:400 11.5px/1.3 var(--mono);color:var(--dim);letter-spacing:.04em}
+.base .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.base .chips span{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line-2);color:var(--muted)}
+.base .acts{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.ghost{display:inline-flex;justify-content:center;align-items:center;gap:6px;padding:9px 14px;border-radius:10px;border:1px solid var(--line-2);background:transparent;font-size:13px;color:var(--muted)}
+.ghost:hover{color:var(--fg);border-color:var(--fg)}
+@media (max-width:860px){
+  .base{grid-template-columns:minmax(0,150px) minmax(0,1fr);gap:16px}
+  .base .no{display:none}
+  .base .acts{grid-column:1 / -1;flex-direction:row}
+  .base .acts .go{flex:1;justify-content:center}
+}
+@media (max-width:480px){.base{grid-template-columns:1fr}.base img{aspect-ratio:16/9}}
+
+footer{border-top:1px solid var(--line);padding-block:28px 96px;color:var(--dim);font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.go{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="惠企孵化基地总览">
+      <span class="mark"><i></i></span>
+      <span><strong>惠企 · 孵化基地</strong><small>HAINAN · 5 INCUBATION BASES</small></span>
+    </a>
+    <nav class="nav" aria-label="页面导航">
+      <a href="#top">3D 总览</a>
+      <a href="#bases">五大基地</a>
+      <a href="m.html" onclick="try{sessionStorage.removeItem('hq-pc')}catch(e){}">手机版</a>
+    </nav>
+    <a class="mlink" href="m.html" onclick="try{sessionStorage.removeItem('hq-pc')}catch(e){}">手机版</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="stage">
+      <div class="mapbox">
+        <canvas id="map" aria-label="海南岛三维地图，标出五个孵化基地的位置"></canvas>
+        <div class="labels" id="labels"></div>
+      </div>
+      <div class="intro">
+        <div class="wrap">
+          <div class="eyebrow">18°10′–20°10′ N · 108°37′–111°03′ E</div>
+          <h1>一座岛，<br><em>五个基地</em>，<br>一站入驻。</h1>
+          <p>海口四处、三亚一处。点地图上的光柱或名称，查看基地并进入它的 3D 园区。</p>
+        </div>
+      </div>
+      <div class="hint"><div class="wrap"><button class="whole" id="whole" type="button">全岛视图</button><span>拖动旋转 · 滚轮缩放 · 海口四个基地在岛北放大圆盘中</span></div></div>
+    </div>
+
+    <aside class="card" id="card" aria-live="polite">
+      <img id="cImg" src="hub/lianchuang.jpg" alt="">
+      <div class="in">
+        <div class="tag"><b id="cCity">海口 · 海甸岛</b><span id="cCoord" class="mono">20.06°N 110.33°E</span></div>
+        <h2 id="cName">联创之星孵化基地</h2>
+        <p id="cDesc">海大东门旁，拎包入驻，即刻办公。</p>
+        <div class="row">
+          <a class="go" id="cGo" href="lianchuangzhixing-3d/index.html">进入 3D 园区
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <button class="step" id="prev" type="button" aria-label="上一个基地"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <button class="step" id="next" type="button" aria-label="下一个基地"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
+          <span class="count" id="cCount">2 / 5</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <section id="bases">
+    <div class="wrap">
+      <div class="head">
+        <h2>五大孵化基地</h2>
+        <p>每个基地都有独立的 3D 园区：从建筑外观走进真实空间。进入后，右下角可随时返回总览或切换基地。</p>
+      </div>
+      <ol class="bases" id="list"></ol>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>惠企 · 海南孵化基地 3D 总览</span>
+    <span>空间照片与视频来自各基地实景素材</span>
+  </div>
+</footer>
+
+<script>try { sessionStorage.setItem("hq-hub", "index.html"); } catch (e) {}</script>
+<script src="hub/bases.js"></script>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="hub/map.js"></script>
+</body>
+</html>
