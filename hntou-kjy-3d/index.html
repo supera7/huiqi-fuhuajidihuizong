@@ -7,9 +7,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="海南热带海洋学院国家大学科技园，三亚市吉阳区育才路 1 号。3D 浏览科技园，从校门走进前台、展厅、会议室和三亚惠企总部。">
 <meta name="theme-color" content="#071521">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: split hero (copy | live 3D campus: 育才路 gate → science-park tower) → photo spaces → services → departments & firms → location.
    Motif: the white/orange vertical louvres on the park's facade; the tower sign glows red at night like the promo video. */
@@ -412,7 +410,6 @@ window.SPACES=[
 ];
 </script>
 
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script>
 // Non-3D UI: space grid, photo viewer, copy buttons. Runs even if WebGL/CDN fails.
 (function(){
@@ -481,8 +478,8 @@ window.SPACES=[
 </script>
 
 <script type="module">
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import * as THREE from "../vendor/three-0.160.0/build/three.module.min.js";
+import { OrbitControls } from "../vendor/three-0.160.0/addons/controls/OrbitControls.js";
 
 const $=id=>document.getElementById(id);
 const stage=$("stage"), hud=$("hud"), fade=$("fade");

@@ -9,9 +9,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#11151b">
 <meta name="description" content="惠企创业社区位于海口市美兰区海彤路3-1号鹏晖花园嘉汇国际大厦。3D 浏览大厦与各楼层功能分布，运镜走进 9 处真实空间。">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+XiaoWei&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+XiaoWei&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: split hero (copy | live 3D model of 嘉汇国际大厦 with color-coded floor bands) → floor elevation directory → photo grid → work/meet/live → plaques. Motif: the bronze door frames and granite of the real lobby. */
 :root{
@@ -411,7 +409,6 @@ window.FLOORS=[
 ];
 </script>
 
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script>
 // Non-3D UI: floor elevation, space grid, photo viewer. Works even if WebGL/CDN fails.
 (function(){
@@ -483,8 +480,8 @@ window.FLOORS=[
 </script>
 
 <script type="module">
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import * as THREE from "../vendor/three-0.160.0/build/three.module.min.js";
+import { OrbitControls } from "../vendor/three-0.160.0/addons/controls/OrbitControls.js";
 
 const $=id=>document.getElementById(id);
 const stage=$("stage"), hud=$("hud"), fade=$("fade");

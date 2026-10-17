@@ -22,9 +22,7 @@
   if (phoneUA || (coarse && small)) location.replace("m.html");
 })();
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: 3D Hainan island map as the opener (five light beacons, Haikou cluster drawn enlarged) with a selected-base panel → the five bases as long rows → footer.
    Motif: chart graticule — real lat/long lines and coordinates, like a nautical chart of the island. */
@@ -124,6 +122,19 @@ img{max-width:100%;display:block}
 }
 .stage{position:absolute;inset:0}
 .mapbox{position:absolute;inset:0}
+.poster{position:absolute;inset:0;width:100%;height:100%;max-width:100%;object-fit:cover;object-position:62% 50%;transition:opacity .9s ease}
+#map{opacity:0;transition:opacity .9s ease}
+.labels{opacity:0;transition:opacity .6s ease .3s}
+.ready #map,.ready .labels{opacity:1}
+.ready .poster{opacity:0}
+.maploading{position:absolute;z-index:2;top:20px;right:max(16px,env(safe-area-inset-right,0px));margin:0;display:flex;align-items:center;gap:8px;max-width:calc(100% - 32px);padding:7px 12px;border-radius:999px;background:rgba(6,21,33,.82);border:1px solid var(--line-2);font-size:12.5px;color:var(--muted);pointer-events:none}
+.maploading i{width:7px;height:7px;flex:none;border-radius:50%;background:var(--sand);animation:hqpulse 1.2s ease-in-out infinite}
+.maploading .l2,.maploading .l3,.slow .maploading .l1,.failed .maploading .l1,.failed .maploading .l2{display:none}
+.slow .maploading .l2,.failed .maploading .l3{display:inline}
+.slow:not(.failed) .maploading .l2{display:inline}
+.ready .maploading{display:none}
+@keyframes hqpulse{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.maploading i{animation:none}}
 .hint{position:absolute;left:0;right:0;bottom:24px;pointer-events:none}
 .hint .wrap{display:flex;align-items:center;gap:16px;font:400 11px/1 var(--mono);color:var(--dim);letter-spacing:.08em}
 .whole{pointer-events:auto;padding:8px 14px;border-radius:999px;border:1px solid var(--line-2);background:rgba(6,17,28,.7);font:500 12px/1 var(--body);color:var(--fg);letter-spacing:0}
@@ -188,6 +199,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
   <div class="hero">
     <div class="stage">
       <div class="mapbox">
+        <img class="poster" src="hub/poster-desktop.jpg" alt="" aria-hidden="true">
         <canvas id="map" aria-label="海南岛三维地图，标出五个孵化基地的位置"></canvas>
         <div class="labels" id="labels"></div>
       </div>
@@ -198,6 +210,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
           <p>海口四处、三亚一处。点地图上的光柱或名称，查看基地并进入它的 3D 园区。</p>
         </div>
       </div>
+      <p class="maploading" role="status"><i></i><span class="l1">3D 地图加载中…</span><span class="l2">网络较慢，3D 地图仍在加载，可先点卡片进入基地</span><span class="l3">此设备暂时无法显示 3D 地图，可直接点卡片进入基地</span></p>
       <div class="hint"><div class="wrap"><button class="whole" id="whole" type="button">全岛视图</button><span>拖动旋转 · 滚轮缩放 · 海口四个基地在岛北放大圆盘中</span></div></div>
     </div>
 
@@ -238,8 +251,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
 
 <script>try { sessionStorage.setItem("hq-hub", "index.html"); } catch (e) {}</script>
 <script src="hub/bases.js"></script>
+<script src="hub/ui-desktop.js"></script>
 
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script nomodule>window.HQmapFailed && window.HQmapFailed();</script>
 <script type="module" src="hub/map.js"></script>
 </body>
 </html>
