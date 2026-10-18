@@ -489,15 +489,15 @@ const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 
 let renderer;
-/* 手机省电：分辨率上限 1.5、阴影改轻量版、静止时约 30 帧；3D 区域滚出屏幕时暂停绘制 */
+/* 手机省电：静止时约 30 帧；3D 区域滚出屏幕时暂停绘制（分辨率与阴影保持原样） */
 const HQ_PHONE=matchMedia('(pointer:coarse)').matches&&Math.min(screen.width,screen.height)<820;
 try{ renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); }
 catch(e){ $("loading").remove(); stage.insertAdjacentHTML("beforeend",'<div class="fallback"><strong>当前浏览器无法显示 3D 模型</strong><span>请换用支持 WebGL 的浏览器。楼层分布和实景空间仍可正常浏览。</span></div>'); }
 if(renderer) init();
 
 function init(){
-renderer.setPixelRatio(Math.min(devicePixelRatio,HQ_PHONE?1.5:2));
-renderer.shadowMap.enabled=true; renderer.shadowMap.type=HQ_PHONE?THREE.PCFShadowMap:THREE.PCFSoftShadowMap;
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
 stage.prepend(renderer.domElement);
 renderer.domElement.setAttribute("aria-label","嘉汇国际大厦三维示意模型，可拖动旋转、滚轮缩放");
@@ -526,7 +526,7 @@ camera.position.set(...VIEWS[0].p); controls.target.set(...VIEWS[0].t);
 // lights
 const hemi=new THREE.HemisphereLight(0xe6eef8,0x404650,1.1); scene.add(hemi);
 const sun=new THREE.DirectionalLight(0xfff0dc,2.3); sun.position.set(22,34,20); sun.castShadow=true;
-sun.shadow.mapSize.set(HQ_PHONE?1024:2048,HQ_PHONE?1024:2048); Object.assign(sun.shadow.camera,{left:-30,right:30,top:30,bottom:-30,near:1,far:110}); sun.shadow.bias=-.0004; scene.add(sun);
+sun.shadow.mapSize.set(2048,2048); Object.assign(sun.shadow.camera,{left:-30,right:30,top:30,bottom:-30,near:1,far:110}); sun.shadow.bias=-.0004; scene.add(sun);
 
 const std=(c,o={})=>new THREE.MeshStandardMaterial({color:c,roughness:.8,...o});
 const M={
