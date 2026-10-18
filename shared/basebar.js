@@ -1,6 +1,6 @@
-/* 五大孵化基地 · 共享导航条
-   在每个基地子站右下角放一个"返回总览 / 切换基地"的悬浮条。
-   进入沉浸式 3D 模式（各子站 z-index ≥ 60 的全屏层）时自动被覆盖，不干扰浏览。 */
+/* 五大孵化基地 · 共享导航条 + 联系方式
+   - 每个基地子站右下角放一个"返回总览 / 切换基地"的悬浮条；进入沉浸式 3D 模式时被全屏层盖住，不干扰浏览。
+   - 页面最底部固定一条联系方式（含沉浸式 3D 模式），子站的 3D 操作按钮会自动上移让出位置。 */
 (function () {
   var me = document.currentScript;
   var root = new URL("../", me ? me.src : location.href).href;
@@ -16,7 +16,7 @@
   BASES.forEach(function (b, i) { if (path.indexOf("/" + b.dir + "/") !== -1 || path.slice(-b.dir.length) === b.dir) cur = i; });
 
   var css = [
-    ".hq-bar{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:55;",
+    ".hq-bar{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(var(--hq-credit-h,34px) + 10px + env(safe-area-inset-bottom,0px));z-index:55;",
     "display:flex;align-items:center;gap:2px;padding:4px;border-radius:999px;background:rgba(10,16,22,.82);",
     "backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);",
     "box-shadow:0 10px 30px rgba(0,0,0,.35);font:500 13px/1 'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,sans-serif;color:#eef2f5}",
@@ -32,7 +32,19 @@
     ".hq-menu a{display:flex;width:100%;box-sizing:border-box;border-radius:9px;padding:10px 12px;gap:10px}",
     ".hq-menu a b{font-weight:500;display:block}.hq-menu a small{display:block;margin-top:4px;font-size:11px;opacity:.6}",
     ".hq-menu a[aria-current=page]{background:rgba(255,255,255,.08)}",
-    "@media (max-width:520px){.hq-bar .hq-lbl{display:none}}"
+    "@media (max-width:520px){.hq-bar .hq-lbl{display:none}}",
+    /* 底部联系方式：盖在所有层（含沉浸式 3D 的 60–63 层）之上 */
+    ":root{--hq-credit-h:34px}",
+    "body{padding-bottom:calc(var(--hq-credit-h) + env(safe-area-inset-bottom,0px))!important}",
+    ".hq-credit{position:fixed;left:0;right:0;bottom:0;z-index:64;margin:0;box-sizing:border-box;min-height:calc(var(--hq-credit-h) + env(safe-area-inset-bottom,0px));",
+    "display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0 6px;text-align:center;",
+    "padding:6px max(16px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));",
+    "background:rgba(8,14,20,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.1);",
+    "font:500 12px/1.5 'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,sans-serif;color:rgba(230,236,242,.72);letter-spacing:.02em}",
+    ".hq-credit a{color:#e9dcbc;text-decoration:none;font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;letter-spacing:.04em;white-space:nowrap}",
+    ".hq-credit a:hover{text-decoration:underline}",
+    /* 四个静态子站的沉浸式 3D 操作栏（.hud）底部让出联系方式的高度 */
+    ".hud{padding-bottom:calc(var(--hq-credit-h) + 16px + env(safe-area-inset-bottom,0px))!important}"
   ].join("");
   var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
 
@@ -54,8 +66,13 @@
     '<span class="hq-lbl">切换基地</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 15l6-6 6 6"/></svg></button>' +
     '<div class="hq-menu" hidden>' + items + '</div>';
 
+  var credit = document.createElement("p");
+  credit.className = "hq-credit";
+  credit.innerHTML = '<span>海南创业/企业宣传视频和3D网站开发</span><a href="tel:13637548127">13637548127</a>';
+
   function mount() {
     document.body.appendChild(bar);
+    document.body.appendChild(credit);
     var btn = bar.querySelector("button"), menu = bar.querySelector(".hq-menu");
     btn.addEventListener("click", function (e) {
       e.stopPropagation();

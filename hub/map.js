@@ -77,8 +77,12 @@ function place(el, p, dy = 0) {
   el.style.transform = `translate(${(v.x * 0.5 + 0.5) * canvas.clientWidth}px, ${(-v.y * 0.5 + 0.5) * canvas.clientHeight + dy}px) translate(-50%,-50%)`;
 }
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+/* 往下滚到基地列表、地图离开屏幕时暂停绘制 */
+let onScreen = true;
+new IntersectionObserver((e) => { onScreen = e[0].isIntersecting; }).observe(canvas);
 let last = performance.now(), first = true;
 renderer.setAnimationLoop((now) => {
+  if (!onScreen && !first) { last = now; return; }
   const dt = Math.min((now - last) / 1000, 0.05); last = now;
   if (tw) {
     const k = ease(Math.min((now - tw.t0) / tw.d, 1));

@@ -452,13 +452,15 @@ const stage=$("stage"), hud=$("hud"), fade=$("fade");
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let renderer;
+/* 手机省电：分辨率上限 1.5、阴影改轻量版、静止时约 30 帧；3D 区域滚出屏幕时暂停绘制 */
+const HQ_PHONE=matchMedia('(pointer:coarse)').matches&&Math.min(screen.width,screen.height)<820;
 try{ renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); }
 catch(e){ $("loading").remove(); stage.insertAdjacentHTML("beforeend",'<div class="fallback"><strong>当前浏览器无法显示 3D 模型</strong><span>请换用支持 WebGL 的浏览器。实景空间和基地介绍仍可正常浏览。</span></div>'); }
 if(renderer) init();
 
 function init(){
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.setPixelRatio(Math.min(devicePixelRatio,HQ_PHONE?1.5:2));
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=HQ_PHONE?THREE.PCFShadowMap:THREE.PCFSoftShadowMap;
 renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
 stage.prepend(renderer.domElement);
 renderer.domElement.setAttribute("aria-label","景业广场三维示意模型，可拖动旋转、滚轮缩放");
@@ -480,7 +482,7 @@ camera.position.set(...VIEWS[0].p); controls.target.set(...VIEWS[0].t);
 // lights
 const hemi=new THREE.HemisphereLight(0xdfe9ff,0x3b4458,1.1); scene.add(hemi);
 const sun=new THREE.DirectionalLight(0xfff1dc,2.3); sun.position.set(18,30,20); sun.castShadow=true;
-sun.shadow.mapSize.set(2048,2048); Object.assign(sun.shadow.camera,{left:-30,right:30,top:30,bottom:-30,near:1,far:90}); sun.shadow.bias=-.0004; scene.add(sun);
+sun.shadow.mapSize.set(HQ_PHONE?1024:2048,HQ_PHONE?1024:2048); Object.assign(sun.shadow.camera,{left:-30,right:30,top:30,bottom:-30,near:1,far:90}); sun.shadow.bias=-.0004; scene.add(sun);
 
 const std=(c,o={})=>new THREE.MeshStandardMaterial({color:c,roughness:.8,...o});
 const M={
@@ -658,7 +660,14 @@ function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSiz
 new ResizeObserver(resize).observe(stage); resize();
 $("loading").remove();
 let last=performance.now();
+let HQ_last=0,HQ_busy=0,HQ_vis=true;
+new IntersectionObserver(e=>{HQ_vis=e[0].isIntersecting;}).observe(renderer.domElement);
+addEventListener('pointerdown',()=>{HQ_busy=Infinity;},{passive:true});
+['pointerup','pointercancel'].forEach(t=>addEventListener(t,()=>{HQ_busy=performance.now()+2000;},{passive:true}));
 renderer.setAnimationLoop(now=>{
+  if(!HQ_vis)return;
+  if(HQ_PHONE&&now>HQ_busy&&now-HQ_last<30)return;
+  HQ_last=now;
   const dt=Math.min(.05,(now-last)/1000);last=now;
   if(tw){const k=Math.min(1,(now-tw.s)/tw.dur),e=ease(k);camera.position.lerpVectors(tw.p0,tw.p1,e);controls.target.lerpVectors(tw.t0,tw.t1,e);if(k>=1)tw.done();}
   else if(mode==="inside"){const a=now*.00005;camera.position.set(Math.sin(a)*34,20,Math.cos(a)*34);controls.target.set(0,4,0);}

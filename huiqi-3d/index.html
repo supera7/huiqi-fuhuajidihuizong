@@ -581,6 +581,8 @@ const stage=$("stage"), hud=$("hud"), fade=$("fade");
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let renderer;
+/* 手机省电：分辨率上限 1.5、阴影改轻量版、静止时约 30 帧；3D 区域滚出屏幕时暂停绘制 */
+const HQ_PHONE=matchMedia('(pointer:coarse)').matches&&Math.min(screen.width,screen.height)<820;
 try{ renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); }
 catch(e){ $("loading").remove(); stage.insertAdjacentHTML("beforeend",'<div class="fallback"><strong>当前浏览器无法显示 3D 模型</strong><span>请换用支持 WebGL 的浏览器。实景照片和视频仍可正常浏览。</span></div>');
   document.addEventListener("click",e=>{const b=e.target.closest("[data-enter],[data-go]");if(!b)return;const id=b.dataset.enter||b.dataset.go;window.Viewer.setSpace(id);document.body.classList.add("is-immersive");hud.classList.add("on","inside");$("journey").hidden=true;$("viewer").classList.add("on");window.Viewer.opened();});
@@ -589,8 +591,8 @@ catch(e){ $("loading").remove(); stage.insertAdjacentHTML("beforeend",'<div clas
 if(renderer) init();
 
 function init(){
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.setPixelRatio(Math.min(devicePixelRatio,HQ_PHONE?1.5:2));
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=HQ_PHONE?THREE.PCFShadowMap:THREE.PCFSoftShadowMap;
 renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
 stage.prepend(renderer.domElement);
 renderer.domElement.setAttribute("aria-label","亚龙别墅三维示意模型，可拖动旋转、滚轮缩放");
@@ -612,7 +614,7 @@ camera.position.set(...VIEWS[0].p); controls.target.set(...VIEWS[0].t);
 // lights
 const hemi=new THREE.HemisphereLight(0xe6f2ff,0x3a4a46,1.15); scene.add(hemi);
 const sun=new THREE.DirectionalLight(0xfff0d8,2.4); sun.position.set(26,40,22); sun.castShadow=true;
-sun.shadow.mapSize.set(2048,2048); Object.assign(sun.shadow.camera,{left:-42,right:42,top:36,bottom:-36,near:1,far:120}); sun.shadow.bias=-.0004; scene.add(sun);
+sun.shadow.mapSize.set(HQ_PHONE?1024:2048,HQ_PHONE?1024:2048); Object.assign(sun.shadow.camera,{left:-42,right:42,top:36,bottom:-36,near:1,far:120}); sun.shadow.bias=-.0004; scene.add(sun);
 
 const std=(c,o={})=>new THREE.MeshStandardMaterial({color:c,roughness:.82,...o});
 const M={
@@ -829,7 +831,14 @@ function resize(){const w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)retur
 new ResizeObserver(resize).observe(stage); resize();
 $("loading").remove();
 let last=performance.now();
+let HQ_last=0,HQ_busy=0,HQ_vis=true;
+new IntersectionObserver(e=>{HQ_vis=e[0].isIntersecting;}).observe(renderer.domElement);
+addEventListener('pointerdown',()=>{HQ_busy=Infinity;},{passive:true});
+['pointerup','pointercancel'].forEach(t=>addEventListener(t,()=>{HQ_busy=performance.now()+2000;},{passive:true}));
 renderer.setAnimationLoop(now=>{
+  if(!HQ_vis)return;
+  if(HQ_PHONE&&now>HQ_busy&&now-HQ_last<30)return;
+  HQ_last=now;
   const dt=Math.min(.05,(now-last)/1000);last=now;
   if(tw){const k=Math.max(0,Math.min(1,(now-tw.s)/tw.dur)),e=ease(k);
     if(tw.curve){const u=e;tw.curve.getPointAt(u,camera.position);tw.curve.getPointAt(Math.min(1,u+.07),ahead);ahead.y-=.35;

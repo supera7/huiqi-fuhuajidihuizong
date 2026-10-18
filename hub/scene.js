@@ -13,6 +13,10 @@ import GEO from "./hainan-geo.js";
 
 export function buildScene(opts) {
   const B = window.BASES;
+  /* lite = 手机省电模式：不做辉光后期，地形和水面用更便宜的 Lambert 光照 */
+  const lite = !!opts.lite;
+  const surf = (p) => { if (!lite || opts.pbr) return new THREE.MeshStandardMaterial(p); const q = { ...p }; delete q.roughness; delete q.metalness; return new THREE.MeshLambertMaterial(q); };
+  const glowK = (k) => (lite ? Math.min(k, 1.15) : k);
   /* ---------- 投影：经纬度 → 场景坐标（1 单位 ≈ 0.1°） ---------- */
   const K = 10, LON0 = 109.85, LAT0 = 19.15, KX = K * Math.cos((19.2 * Math.PI) / 180);
   const px = (lon) => (lon - LON0) * KX, pz = (lat) => -(lat - LAT0) * K;
@@ -91,7 +95,7 @@ export function buildScene(opts) {
   const scene = new THREE.Scene();
   const SKY = 0x061521;
   scene.background = new THREE.Color(SKY);
-  scene.fog = new THREE.FogExp2(SKY, 0.0135);
+  scene.fog = new THREE.FogExp2(SKY, lite ? 0.006 : 0.0135);
   const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 400);
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true; controls.dampingFactor = 0.07;
@@ -129,12 +133,12 @@ export function buildScene(opts) {
   }
   tg.setAttribute("color", new THREE.BufferAttribute(col, 3));
   tg.computeVertexNormals();
-  scene.add(new THREE.Mesh(tg, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.92, metalness: 0 })));
+  scene.add(new THREE.Mesh(tg, surf({ vertexColors: true, roughness: 0.92, metalness: 0 })));
 
   /* 远海海床与海面 */
-  const bed = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ color: deep, roughness: 1 }));
+  const bed = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), surf({ color: deep, roughness: 1 }));
   bed.rotation.x = -Math.PI / 2; bed.position.y = -1.66; scene.add(bed);
-  const water = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ color: 0x0c3a57, roughness: 0.42, metalness: 0.05, transparent: true, opacity: 0.6, depthWrite: false }));
+  const water = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), surf({ color: 0x0c3a57, roughness: 0.42, metalness: 0.05, transparent: true, opacity: 0.6, depthWrite: false }));
   water.rotation.x = -Math.PI / 2; scene.add(water);
 
   /* 海岸浪花线 */
@@ -217,14 +221,14 @@ export function buildScene(opts) {
   }
   const disc = new THREE.Group(); disc.position.copy(INSET); scene.add(disc);
   const body = new THREE.Mesh(new THREE.CylinderGeometry(R_INSET, R_INSET * 0.97, 0.32, 96, 1, true),
-    new THREE.MeshStandardMaterial({ color: 0xe9dcb8, roughness: 0.5, metalness: 0.25, side: THREE.DoubleSide }));
+    surf({ color: 0xe9dcb8, roughness: 0.5, metalness: 0.25, side: THREE.DoubleSide }));
   body.position.y = -0.16; disc.add(body);
-  const under = new THREE.Mesh(new THREE.CircleGeometry(R_INSET * 0.97, 96), new THREE.MeshStandardMaterial({ color: 0x0b2232, roughness: 0.8 }));
+  const under = new THREE.Mesh(new THREE.CircleGeometry(R_INSET * 0.97, 96), surf({ color: 0x0b2232, roughness: 0.8 }));
   under.rotation.x = Math.PI / 2; under.position.y = -0.32; disc.add(under);
   let face;
   function buildFace() {
     if (face) { disc.remove(face); face.material.map.dispose(); }
-    face = new THREE.Mesh(new THREE.CircleGeometry(R_INSET, 96), new THREE.MeshStandardMaterial({ map: insetTexture(), roughness: 0.75 }));
+    face = new THREE.Mesh(new THREE.CircleGeometry(R_INSET, 96), surf({ map: insetTexture(), roughness: 0.75 }));
     face.rotation.x = -Math.PI / 2; face.rotation.z = 0; face.position.y = 0.002; disc.add(face);
   }
   buildFace();
@@ -254,16 +258,16 @@ export function buildScene(opts) {
     else { const x = px(b.lon), z = pz(b.lat); g.position.set(x, Math.max(heightAt(x, z), 0), z); }
     const H = inHaikou(b) ? 3.0 : 4.2;
     const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, H, 12, 1, true),
-      new THREE.MeshBasicMaterial({ color: c.clone().multiplyScalar(2.2), toneMapped: false, transparent: true, opacity: 0.95, depthWrite: false }));
+      new THREE.MeshBasicMaterial({ color: c.clone().multiplyScalar(glowK(2.2)), toneMapped: false, transparent: true, opacity: 0.95, depthWrite: false }));
     beam.position.y = H / 2; g.add(beam);
     const glow = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, H, 16, 1, true),
       new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.12, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }));
     glow.position.y = H / 2; g.add(glow);
-    const cap = new THREE.Mesh(new THREE.SphereGeometry(0.16, 20, 12), new THREE.MeshBasicMaterial({ color: c.clone().multiplyScalar(2.6), toneMapped: false }));
+    const cap = new THREE.Mesh(new THREE.SphereGeometry(0.16, 20, 12), new THREE.MeshBasicMaterial({ color: c.clone().multiplyScalar(glowK(2.6)), toneMapped: false }));
     cap.position.y = H; g.add(cap);
-    const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.4, 0.12, 28), new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 0.5, roughness: 0.4 }));
+    const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.4, 0.12, 28), surf({ color: c, emissive: c, emissiveIntensity: 0.5, roughness: 0.4 }));
     foot.position.y = 0.06; g.add(foot);
-    const pulse = new THREE.Mesh(new THREE.RingGeometry(0.42, 0.5, 48), new THREE.MeshBasicMaterial({ color: c.clone().multiplyScalar(1.6), toneMapped: false, transparent: true, opacity: 0.7, depthWrite: false, side: THREE.DoubleSide }));
+    const pulse = new THREE.Mesh(new THREE.RingGeometry(0.42, 0.5, 48), new THREE.MeshBasicMaterial({ color: c.clone().multiplyScalar(glowK(1.6)), toneMapped: false, transparent: true, opacity: 0.7, depthWrite: false, side: THREE.DoubleSide }));
     pulse.rotation.x = -Math.PI / 2; pulse.position.y = 0.04; g.add(pulse);
     const hit = new THREE.Mesh(new THREE.CylinderGeometry(0.65, 0.65, H + 0.6, 8), new THREE.MeshBasicMaterial({ visible: false }));
     hit.position.y = H / 2; hit.userData.i = i; g.add(hit);
@@ -295,10 +299,14 @@ export function buildScene(opts) {
   gratLabels.forEach((g) => tag("grat", g.t, g.p));
 
   /* ---------- 后期：光柱辉光 ---------- */
-  const composer = new EffectComposer(renderer);
-  composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), opts.bloom[0], opts.bloom[1], opts.bloom[2]);
-  composer.addPass(bloom);
-  composer.addPass(new OutputPass());
-  return { THREE, renderer, scene, camera, controls, composer, bloom, canvas, INSET, inHaikou, beacons, pins, tags, disc };
+  let composer = null, bloom = null;
+  if (!lite) {
+    composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), opts.bloom[0], opts.bloom[1], opts.bloom[2]);
+    composer.addPass(bloom);
+    composer.addPass(new OutputPass());
+  }
+  const render = () => (composer ? composer.render() : renderer.render(scene, camera));
+  return { THREE, renderer, scene, camera, controls, composer, bloom, render, canvas, INSET, inHaikou, beacons, pins, tags, disc };
 }
