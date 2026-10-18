@@ -82,6 +82,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .dots{display:flex;gap:6px;margin-left:auto}
 .dots button{width:8px;height:8px;padding:0;border:0;border-radius:99px;background:rgba(255,255,255,.22);transition:width .25s,background .25s}
 .dots button[aria-current=true]{width:22px;background:var(--cc)}
+.credit{margin:8px 0 0;padding:0 var(--gr) 0 var(--gl);text-align:center;font-size:11.5px;line-height:1.4;color:var(--dim)}
+.credit a{color:var(--sand);text-decoration:none;font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:.04em;margin-left:4px;white-space:nowrap}
 .rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:2px max(28px,env(safe-area-inset-right,0px)) 4px max(28px,env(safe-area-inset-left,0px));scroll-padding-inline:28px}
 .rail::-webkit-scrollbar{display:none}
 .bc{flex:0 0 min(calc(100vw - 56px),420px);scroll-snap-align:center;display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;padding:10px;border-radius:16px;
@@ -128,6 +130,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     全岛
   </button><span>左右滑动切换基地</span><div class="dots" id="dots"></div></div>
     <div class="rail" id="rail"></div>
+    <p class="credit">海南创业/企业宣传视频和3D网站开发 <a href="tel:13637548127">13637548127</a></p>
   </section>
 </div>
 
