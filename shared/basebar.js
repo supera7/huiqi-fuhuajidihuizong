@@ -16,7 +16,7 @@
   BASES.forEach(function (b, i) { if (path.indexOf("/" + b.dir + "/") !== -1 || path.slice(-b.dir.length) === b.dir) cur = i; });
 
   var css = [
-    ".hq-bar{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(var(--hq-credit-h,34px) + 10px + env(safe-area-inset-bottom,0px));z-index:55;",
+    ".hq-bar{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(var(--hq-credit-total,34px) + 10px);z-index:55;",
     "display:flex;align-items:center;gap:2px;padding:4px;border-radius:999px;background:rgba(10,16,22,.82);",
     "backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);",
     "box-shadow:0 10px 30px rgba(0,0,0,.35);font:500 13px/1 'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,sans-serif;color:#eef2f5}",
@@ -35,7 +35,7 @@
     "@media (max-width:520px){.hq-bar .hq-lbl{display:none}}",
     /* 底部联系方式：盖在所有层（含沉浸式 3D 的 60–63 层）之上 */
     ":root{--hq-credit-h:34px}",
-    "body{padding-bottom:calc(var(--hq-credit-h) + env(safe-area-inset-bottom,0px))!important}",
+    "body{padding-bottom:var(--hq-credit-total,34px)!important}",
     ".hq-credit{position:fixed;left:0;right:0;bottom:0;z-index:64;margin:0;box-sizing:border-box;min-height:calc(var(--hq-credit-h) + env(safe-area-inset-bottom,0px));",
     "display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0 6px;text-align:center;",
     "padding:6px max(16px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));",
@@ -44,7 +44,7 @@
     ".hq-credit a{color:#e9dcbc;text-decoration:none;font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;letter-spacing:.04em;white-space:nowrap}",
     ".hq-credit a:hover{text-decoration:underline}",
     /* 四个静态子站的沉浸式 3D 操作栏（.hud）底部让出联系方式的高度 */
-    ".hud{padding-bottom:calc(var(--hq-credit-h) + 16px + env(safe-area-inset-bottom,0px))!important}"
+    ".hud{padding-bottom:calc(var(--hq-credit-total,34px) + 16px)!important}"
   ].join("");
   var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
 
@@ -68,11 +68,15 @@
 
   var credit = document.createElement("p");
   credit.className = "hq-credit";
-  credit.innerHTML = '<span>海南创业办公选址/宣传视频制作/3D网站开发</span><a href="tel:13637548127">13637548127</a>';
+  credit.innerHTML = '<span>海南创业办公选址/宣传视频制作/游戏开发/3D网站开发</span><a href="tel:13637548127">13637548127</a>';
 
   function mount() {
     document.body.appendChild(bar);
     document.body.appendChild(credit);
+    /* 联系方式在窄屏会折成两行：按实际高度让出位置 */
+    var sync = function () { document.documentElement.style.setProperty("--hq-credit-total", credit.offsetHeight + "px"); };
+    sync();
+    if (window.ResizeObserver) new ResizeObserver(sync).observe(credit); else window.addEventListener("resize", sync);
     var btn = bar.querySelector("button"), menu = bar.querySelector(".hq-menu");
     btn.addEventListener("click", function (e) {
       e.stopPropagation();
