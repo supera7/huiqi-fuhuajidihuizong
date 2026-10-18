@@ -68,7 +68,7 @@
 
   var credit = document.createElement("p");
   credit.className = "hq-credit";
-  credit.innerHTML = '<span>海南创业/企业宣传视频和3D网站开发</span><a href="tel:13637548127">13637548127</a>';
+  credit.innerHTML = '<span>海南创业办公选址/宣传视频制作/3D网站开发</span><a href="tel:13637548127">13637548127</a>';
 
   function mount() {
     document.body.appendChild(bar);
